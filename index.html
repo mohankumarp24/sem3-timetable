@@ -13,7 +13,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Manrope:wght@500;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <title>Sem III Timetable — PSGIM</title>
 <style>
   :root{
@@ -34,7 +34,7 @@
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html{scroll-behavior:smooth;}
   @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;} .ticker-track{animation:none !important;} }
-  html,body{margin:0; padding:0; background:var(--ink); color:var(--text); font-family:'Inter',-apple-system,sans-serif;}
+  html,body{margin:0; padding:0; background:var(--ink); color:var(--text); font-family:'Inter',-apple-system,sans-serif; font-weight:500;}
   body{transition:background .25s ease, color .25s ease; padding-bottom:calc(66px + var(--safe-b));}
   .mono{font-family:'Space Mono', monospace;}
   .disp{font-family:'Manrope', sans-serif;}
@@ -43,7 +43,7 @@
   ::selection{background:var(--amber); color:#1B1D22;}
 
   /* ---------- HEADER ---------- */
-  header{position:sticky; top:0; z-index:30; background:var(--ink); border-bottom:1px solid var(--line); padding:14px 16px 12px;}
+  header{position:sticky; top:0; z-index:30; background:var(--panel); border-bottom:1px solid var(--line); padding:14px 16px 12px;}
   .toprow{display:flex; align-items:center; gap:10px;}
   .mark{width:34px; height:34px; border-radius:9px; flex-shrink:0; background:#0D0F13; border:1px solid rgba(255,255,255,0.1);
     display:flex; align-items:center; justify-content:center;}
@@ -61,14 +61,14 @@
   .ticker-head{display:flex; align-items:stretch; gap:0; padding:12px 14px 10px;}
   .tk-col{flex:1; min-width:0;}
   .tk-col + .tk-col{border-left:1px solid rgba(255,255,255,0.08); padding-left:14px; margin-left:14px;}
-  .tk-label{font-family:'Space Mono',monospace; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:#767C88; display:flex; align-items:center; gap:5px; margin-bottom:5px;}
+  .tk-label{font-family:'Space Mono',monospace; font-weight:700; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:#767C88; display:flex; align-items:center; gap:5px; margin-bottom:5px;}
   .live-dot{width:6px; height:6px; border-radius:50%; background:var(--live); flex-shrink:0;}
   .live-dot.pulsing{animation:pulse 1.6s ease-in-out infinite;}
   @keyframes pulse{0%,100%{opacity:1; box-shadow:0 0 0 0 rgba(95,214,138,.5);} 50%{opacity:.6; box-shadow:0 0 0 4px rgba(95,214,138,0);}}
-  .tk-main{font-family:'Space Mono',monospace; font-weight:700; font-size:16px; color:#F5D9A0; line-height:1.25; word-break:break-word;}
+  .tk-main{font-family:'Space Mono',monospace; font-weight:900; font-size:16px; color:#F5D9A0; line-height:1.25; word-break:break-word;}
   .tk-main.dim{color:#5A6270; font-weight:400; font-size:12.5px;}
   .tk-meta{font-size:10px; color:#767C88; margin-top:4px; line-height:1.4;}
-  .ticker-tape{border-top:1px solid rgba(255,255,255,0.08); overflow:hidden; white-space:nowrap; padding:7px 0; background:rgba(255,255,255,0.015);}
+  .ticker-tape{border-top:1px solid rgba(255,255,255,0.08); overflow:hidden; white-space:nowrap; padding:7px 0;}
   .ticker-track{display:inline-block; animation:scroll-left 28s linear infinite;}
   .ticker-track span{font-family:'Space Mono',monospace; font-size:10.5px; color:#8A90A0; padding:0 22px; letter-spacing:.3px;}
   .ticker-track span b{color:#C7CBD4; font-weight:700;}
@@ -127,41 +127,31 @@
   .p-time{flex-shrink:0; width:58px; font-family:'Space Mono',monospace; font-size:10.5px; color:var(--text-dim); display:flex; flex-direction:column; justify-content:center; line-height:1.4;}
   .p-bar{width:4px; align-self:stretch; border-radius:3px; flex-shrink:0;}
   .p-body{flex:1; min-width:0; display:flex; flex-direction:column; justify-content:center;}
-  .p-code{font-family:'Manrope',sans-serif; font-weight:800; font-size:13.5px; display:flex; align-items:center; gap:6px; color:var(--text);}
+  .p-code{font-family:'Manrope',sans-serif; font-weight:900; font-size:13.5px; display:flex; align-items:center; gap:6px; color:var(--text);}
   .p-sub{font-size:10.5px; color:var(--text-dim); margin-top:1px;}
   .p-break-label{font-size:10.5px; color:var(--text-faint); letter-spacing:.3px; font-weight:600;}
   .next-tag{flex-shrink:0; font-family:'Space Mono',monospace; font-size:8.5px; font-weight:700; letter-spacing:.5px; color:var(--amber);
     border:1px solid var(--amber); border-radius:5px; padding:4px 7px;}
 
-  /* ---------- GRID VIEW (periods as rows, days as columns) ---------- */
-  .gridwrap{border:1px solid var(--line); border-radius:var(--radius); background:var(--panel); overflow:auto;
-    max-height:min(64vh, 540px); margin-bottom:20px;
-    scrollbar-width:thin; scrollbar-color:var(--line-strong) transparent;}
-  .gridwrap::-webkit-scrollbar{width:7px; height:7px;}
-  .gridwrap::-webkit-scrollbar-track{background:transparent;}
-  .gridwrap::-webkit-scrollbar-thumb{background:var(--line-strong); border-radius:4px;}
-  .gridwrap::-webkit-scrollbar-thumb:hover{background:var(--text-faint);}
-  .gridwrap::-webkit-scrollbar-button{display:none; width:0; height:0;}
-  .gridwrap::-webkit-scrollbar-corner{background:transparent;}
-  table.tt{border-collapse:collapse; width:100%; table-layout:fixed;}
-  table.tt thead th{position:sticky; top:0; z-index:2; background:var(--panel); font-family:'Space Mono',monospace; font-size:10px;
-    color:var(--text-dim); font-weight:700; padding:9px 3px; text-align:center; border-bottom:1px solid var(--line-strong);}
-  table.tt thead th.corner{position:sticky; left:0; z-index:3; width:52px;}
+  /* ---------- GRID VIEW (days as rows, times as columns — fits in one view, no scroll) ---------- */
+  .gridwrap{border:1px solid var(--line); border-radius:var(--radius); background:var(--panel); margin-bottom:20px; padding:2px;}
+  table.tt{border-collapse:collapse; width:100%; table-layout:fixed; background:var(--panel);}
+  table.tt thead th{background:var(--panel); font-family:'Space Mono',monospace; font-size:9px;
+    color:var(--text-dim); font-weight:700; padding:7px 1px 6px; text-align:center; border-bottom:1px solid var(--line-strong); letter-spacing:-.2px;}
+  table.tt thead th .th-start{display:block; color:var(--text-dim); font-weight:700;}
+  table.tt thead th .th-end{display:block; color:var(--text-faint); font-weight:400; font-size:7.5px; margin-top:1px;}
+  table.tt thead th.corner{background:var(--panel);}
   table.tt thead th.today-h{color:var(--amber);}
-  table.tt td{border-bottom:1px solid var(--line); padding:5px 4px; vertical-align:middle; text-align:center;}
-  table.tt td.time-lbl{font-family:'Space Mono',monospace; font-size:9px; color:var(--text-dim); text-align:left; padding-left:9px;
-    white-space:nowrap; position:sticky; left:0; z-index:1; background:var(--panel); width:52px;}
-  table.tt td.today-col{background:rgba(255,176,32,0.055);}
-  tr.break-row-grid td{padding:4px 4px;}
-  tr.break-row-grid .break-span{color:var(--text-faint); font-size:8.5px; letter-spacing:.5px; text-transform:uppercase; text-align:center;
-    background:repeating-linear-gradient(135deg, var(--line) 0, var(--line) 1px, transparent 1px, transparent 6px); border-radius:5px; padding:4px 0;}
-  tr.break-row-grid.now-break{background:rgba(255,176,32,0.07);}
-  tr.break-row-grid.now-break .break-span{color:var(--amber); font-weight:700;}
-  .cell-block{border-radius:8px; padding:9px 2px; font-size:10px; font-weight:800; color:#0D0F13; cursor:pointer; line-height:1.15;
-    min-height:38px; width:100%; display:flex; align-items:center; justify-content:center; border:1px solid rgba(0,0,0,0.16);}
+  table.tt td{background:var(--panel); border-bottom:1px solid var(--line); padding:3px 2px; vertical-align:middle; text-align:center;}
+  table.tt td.daylabel{background:var(--panel); font-family:'Manrope',sans-serif; font-weight:900; font-size:11px; text-align:left; padding-left:8px; letter-spacing:-.1px;}
+  table.tt td.today-col{background:rgba(255,176,32,0.06);}
+  table.tt tr:last-child td{border-bottom:none;}
+  .cell-block{border-radius:7px; padding:6px 1px; font-size:8.6px; font-weight:900; color:#0D0F13; cursor:pointer; line-height:1.08;
+    min-height:32px; width:100%; display:flex; align-items:center; justify-content:center; border:1px solid rgba(0,0,0,0.16);
+    letter-spacing:-.2px; overflow-wrap:anywhere;}
   .cell-block.cell-now{box-shadow:0 0 0 2px var(--amber), 0 0 0 1px rgba(0,0,0,0.16) inset;}
   .cell-block.cell-next{box-shadow:0 0 0 2px rgba(255,176,32,0.45), 0 0 0 1px rgba(0,0,0,0.16) inset;}
-  .cell-empty{color:var(--text-faint); background:transparent !important; border:none !important; box-shadow:none !important;}
+  .cell-empty{color:var(--text-faint); background:transparent !important; border:none !important; box-shadow:none !important; font-weight:400 !important;}
 
   /* ---------- BOTTOM SHEET ---------- */
   .sheet-overlay{position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:50; opacity:0; pointer-events:none; transition:opacity .2s ease;}
@@ -252,19 +242,19 @@
     <div class="viewtoggle">
       <button class="now-btn" onclick="jumpToNow()"><span class="live-dot pulsing"></span>Now</button>
       <div class="vt-group">
-        <button class="vt-btn active" id="vt-cards" onclick="setWeekView('cards')">Day</button>
-        <button class="vt-btn" id="vt-grid" onclick="setWeekView('grid')">Grid</button>
+        <button class="vt-btn" id="vt-cards" onclick="setWeekView('cards')">Day</button>
+        <button class="vt-btn active" id="vt-grid" onclick="setWeekView('grid')">Grid</button>
       </div>
     </div>
 
     <div class="legend" id="legend"></div>
 
-    <div id="cardsView">
+    <div id="cardsView" style="display:none;">
       <div class="daypicker" id="dayPicker"></div>
       <div class="period-list" id="periodList"></div>
     </div>
 
-    <div id="gridView" style="display:none;">
+    <div id="gridView" style="display:block;">
       <div class="gridwrap" id="gridWrap"><table class="tt" id="gridTable"></table></div>
     </div>
   </div>
@@ -359,7 +349,7 @@ const MONTHS_SHORT = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT
 const DAY_ABBR = {Monday:"MON",Tuesday:"TUE",Wednesday:"WED",Thursday:"THU",Friday:"FRI",Saturday:"SAT"};
 
 let activeSubjectFilter = "all";
-let weekView = "cards";
+let weekView = "grid";
 let selectedDay = null;
 
 /* ================= INIT ================= */
@@ -501,44 +491,46 @@ function jumpToNow(){
   scrollToCurrentRow(true);
 }
 
-/* ================= GRID VIEW (periods as rows, days as columns) ================= */
+/* ================= GRID VIEW (days as rows, class-period times as columns) ================= */
+function fmtTimeShort(t){
+  const [h,m] = t.split(':').map(Number);
+  const ap = h>=12?'p':'a';
+  const hh = h%12===0?12:h%12;
+  return hh+':'+String(m).padStart(2,'0')+ap;
+}
 function renderGrid(){
   const el = document.getElementById('gridTable');
   const tn = todayName();
   const {now, next} = findNowNext();
   const nextClass = tn ? nextClassAfter(currentMinutes(), SCHEDULE[tn]) : null;
 
-  let theadCells = `<th class="corner"></th>` + DAYS.map(d=>`<th class="${d===tn?'today-h':''}">${d.slice(0,3)}</th>`).join('');
-  let head = `<thead><tr>${theadCells}</tr></thead>`;
+  // Only real class periods become columns — breaks/lunch are already visible
+  // in the Day list, so the grid stays compact enough to fit in one view.
+  const classCols = PERIODS.map((p,idx)=>({p,idx})).filter(x=>!x.p.type);
+  const colPct = (85/classCols.length).toFixed(3);
+  const colgroup = `<colgroup><col style="width:15%">` + classCols.map(()=>`<col style="width:${colPct}%">`).join('') + `</colgroup>`;
 
-  let bodyRows = '';
-  PERIODS.forEach((p, idx)=>{
-    if(p.type){
-      const isNowBreak = tn && now && now.period.i===p.i && !now.code;
-      bodyRows += `<tr class="break-row-grid ${isNowBreak?'now-break':''}">
-        <td class="time-lbl">${fmtTime(p.start)}</td>
-        <td class="break-span" colspan="${DAYS.length}">${p.type==='lunch'?'Lunch':'Break'}</td>
-      </tr>`;
-      return;
-    }
-    let cells = '';
-    DAYS.forEach(d=>{
-      const code = SCHEDULE[d][idx];
-      const isToday = d===tn;
-      const isNowCell = isToday && now && !now.type && now.period.i===p.i;
-      const isNextCell = isToday && nextClass && nextClass.period.i===p.i;
+  const theadCells = `<th class="corner"></th>` + classCols.map(x=>`<th><span class="th-start">${fmtTimeShort(x.p.start)}</span><span class="th-end">${fmtTimeShort(x.p.end)}</span></th>`).join('');
+  const head = `<thead><tr>${theadCells}</tr></thead>`;
+
+  const bodyRows = DAYS.map(d=>{
+    const isToday = d===tn;
+    const cells = classCols.map(x=>{
+      const code = SCHEDULE[d][x.idx];
+      const isNowCell = isToday && now && !now.type && now.period.i===x.p.i;
+      const isNextCell = isToday && nextClass && nextClass.period.i===x.p.i;
       const dim = code && activeSubjectFilter!=='all' && code!==activeSubjectFilter;
       const ring = code ? (isNowCell?'cell-now':(isNextCell?'cell-next':'')) : '';
       if(code){
         const c = COURSES[code];
-        cells += `<td class="${isToday?'today-col':''}"><button class="cell-block ${ring}" style="background:${c.color}; opacity:${dim?0.25:1}" onclick="openSheet('${code}')">${code}</button></td>`;
-      } else {
-        cells += `<td class="${isToday?'today-col':''}"><div class="cell-block cell-empty">–</div></td>`;
+        return `<td class="${isToday?'today-col':''}"><button class="cell-block ${ring}" style="background:${c.color}; opacity:${dim?0.25:1}" onclick="openSheet('${code}')">${code}</button></td>`;
       }
-    });
-    bodyRows += `<tr><td class="time-lbl">${fmtTime(p.start)}</td>${cells}</tr>`;
-  });
-  el.innerHTML = head + `<tbody>${bodyRows}</tbody>`;
+      return `<td class="${isToday?'today-col':''}"><div class="cell-block cell-empty">–</div></td>`;
+    }).join('');
+    return `<tr><td class="daylabel ${isToday?'today-col':''}">${d.slice(0,3)}</td>${cells}</tr>`;
+  }).join('');
+
+  el.innerHTML = colgroup + head + `<tbody>${bodyRows}</tbody>`;
 }
 
 function setWeekView(v){
