@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sem III">
+<meta name="theme-color" content="#0D0F13">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Sem III Timetable — PSGIM</title>
+<style>
+  :root{
+    --ink:#0D0F13; --panel:#171A20; --panel-soft:#1E222A; --panel-raised:#252A33;
+    --line:rgba(255,255,255,0.08); --line-strong:rgba(255,255,255,0.16);
+    --text:#F1EFE9; --text-dim:#9AA0AC; --text-faint:#5F6570;
+    --amber:#FFB020; --amber-soft:#332711; --live:#5FD68A;
+    --c-iapm1:#3FBFA5; --c-fd1:#E8735C; --c-pm1:#5B8DEF; --c-mfs1:#D65DB1;
+    --c-sma:#8B6BD1; --c-brsa:#6FBF5B; --c-proj:#8B93A1; --c-club:#4FB8D6;
+    --radius:14px; --safe-b:env(safe-area-inset-bottom, 0px);
+  }
+  [data-theme="light"]{
+    --ink:#F3F1EA; --panel:#FFFFFF; --panel-soft:#FBFAF6; --panel-raised:#EFECE2;
+    --line:rgba(20,20,15,0.08); --line-strong:rgba(20,20,15,0.14);
+    --text:#1B1D22; --text-dim:#61666F; --text-faint:#9A9FA8;
+    --amber:#B8760A; --amber-soft:#F4E3C2; --live:#1C8F52;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;} .ticker-track{animation:none !important;} }
+  html,body{margin:0; padding:0; background:var(--ink); color:var(--text); font-family:'Inter',-apple-system,sans-serif;}
+  body{transition:background .25s ease, color .25s ease; padding-bottom:calc(66px + var(--safe-b));}
+  .mono{font-family:'Space Mono', monospace;}
+  .disp{font-family:'Manrope', sans-serif;}
+  button{font-family:inherit; color:inherit; background:none; border:none; -webkit-appearance:none; appearance:none;}
+  :focus-visible{outline:2px solid var(--amber); outline-offset:2px;}
+  ::selection{background:var(--amber); color:#1B1D22;}
+
+  /* ---------- HEADER ---------- */
+  header{position:sticky; top:0; z-index:30; background:var(--ink); border-bottom:1px solid var(--line); padding:14px 16px 12px;}
+  .toprow{display:flex; align-items:center; gap:10px;}
+  .mark{width:34px; height:34px; border-radius:9px; flex-shrink:0; background:#0D0F13; border:1px solid rgba(255,255,255,0.1);
+    display:flex; align-items:center; justify-content:center;}
+  .titleblock{flex:1; min-width:0;}
+  .titleblock h1{margin:0; font-size:14.5px; font-weight:800; font-family:'Manrope',sans-serif; line-height:1.2;}
+  .titleblock .sub{font-size:10.5px; color:var(--text-dim); letter-spacing:.4px; margin-top:1px;}
+  .icon-btn{width:44px; height:44px; border-radius:10px; border:1px solid var(--line-strong); background:var(--panel);
+    color:var(--text); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px; flex-shrink:0;}
+
+  main{max-width:640px; margin:0 auto; padding:14px 16px 0;}
+
+  /* ---------- TICKER (signature element) ---------- */
+  .ticker-panel{background:#08090C; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; margin-bottom:12px;}
+  [data-theme="light"] .ticker-panel{background:#14161B;}
+  .ticker-head{display:flex; align-items:stretch; gap:0; padding:12px 14px 10px;}
+  .tk-col{flex:1; min-width:0;}
+  .tk-col + .tk-col{border-left:1px solid rgba(255,255,255,0.08); padding-left:14px; margin-left:14px;}
+  .tk-label{font-family:'Space Mono',monospace; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:#767C88; display:flex; align-items:center; gap:5px; margin-bottom:5px;}
+  .live-dot{width:6px; height:6px; border-radius:50%; background:var(--live); flex-shrink:0;}
+  .live-dot.pulsing{animation:pulse 1.6s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1; box-shadow:0 0 0 0 rgba(95,214,138,.5);} 50%{opacity:.6; box-shadow:0 0 0 4px rgba(95,214,138,0);}}
+  .tk-main{font-family:'Space Mono',monospace; font-weight:700; font-size:16px; color:#F5D9A0; line-height:1.25; word-break:break-word;}
+  .tk-main.dim{color:#5A6270; font-weight:400; font-size:12.5px;}
+  .tk-meta{font-size:10px; color:#767C88; margin-top:4px; line-height:1.4;}
+  .ticker-tape{border-top:1px solid rgba(255,255,255,0.08); overflow:hidden; white-space:nowrap; padding:7px 0; background:rgba(255,255,255,0.015);}
+  .ticker-track{display:inline-block; animation:scroll-left 28s linear infinite;}
+  .ticker-track span{font-family:'Space Mono',monospace; font-size:10.5px; color:#8A90A0; padding:0 22px; letter-spacing:.3px;}
+  .ticker-track span b{color:#C7CBD4; font-weight:700;}
+  .ticker-track span.tk-past{opacity:.42; text-decoration:line-through;}
+  @keyframes scroll-left{from{transform:translateX(0);} to{transform:translateX(-50%);}}
+
+  /* ---------- MILESTONE CHIP ---------- */
+  .milestone-chip{display:flex; align-items:center; gap:10px; background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    padding:10px 12px; margin-bottom:16px; cursor:pointer; width:100%; text-align:left;}
+  .milestone-chip .mc-tag{font-family:'Space Mono',monospace; font-size:9px; letter-spacing:.5px; text-transform:uppercase; color:var(--amber); font-weight:700; flex-shrink:0;}
+  .milestone-chip .mc-body{flex:1; min-width:0; font-size:11.5px; color:var(--text);}
+  .milestone-chip .mc-body b{font-weight:700;}
+  .milestone-chip .mc-count{font-family:'Space Mono',monospace; font-size:11px; color:var(--text-dim); flex-shrink:0;}
+  .milestone-chip .mc-arrow{color:var(--text-faint); flex-shrink:0;}
+
+  /* ---------- VIEW TOGGLE ---------- */
+  .viewtoggle{display:flex; justify-content:space-between; align-items:center; gap:6px; margin-bottom:10px;}
+  .vt-group{display:flex; gap:6px;}
+  .vt-btn{background:var(--panel); border:1px solid var(--line-strong); color:var(--text-dim); border-radius:8px; padding:8px 12px;
+    font-size:10.5px; font-weight:700; letter-spacing:.3px; cursor:pointer; min-height:36px;}
+  .vt-btn.active{background:var(--amber); color:#1B1D22; border-color:var(--amber);}
+  .now-btn{display:flex; align-items:center; gap:6px; background:var(--panel); border:1px solid var(--amber); color:var(--amber);
+    border-radius:8px; padding:8px 12px; font-size:10.5px; font-weight:700; letter-spacing:.3px; cursor:pointer; min-height:36px;}
+  .now-btn .live-dot{background:var(--amber);}
+
+  /* ---------- LEGEND CHIPS ---------- */
+  .legend{display:flex; gap:6px; overflow-x:auto; padding-bottom:12px;}
+  .legend::-webkit-scrollbar{display:none;}
+  .chip{display:flex; align-items:center; gap:5px; flex-shrink:0; padding:7px 11px; border-radius:999px; border:1px solid var(--line-strong);
+    background:var(--panel); font-size:10.5px; font-weight:700; color:var(--text-dim); cursor:pointer; min-height:32px;}
+  .chip .sw{width:7px; height:7px; border-radius:50%; flex-shrink:0;}
+  .chip.active{border-color:var(--amber); color:var(--text); background:var(--panel-raised);}
+
+  /* ---------- DAY PICKER ---------- */
+  .daypicker{display:flex; gap:6px; overflow-x:auto; margin-bottom:12px;}
+  .daypicker::-webkit-scrollbar{display:none;}
+  .day-pill{flex-shrink:0; background:var(--panel); border:1px solid var(--line-strong); color:var(--text-dim); border-radius:10px;
+    padding:8px 13px; font-size:11.5px; font-weight:700; cursor:pointer; text-align:center; min-width:54px; min-height:44px;}
+  .day-pill .dn{display:block; font-size:9px; letter-spacing:.5px; opacity:.7; margin-bottom:1px;}
+  .day-pill.active{background:var(--amber); color:#1B1D22; border-color:var(--amber);}
+  .day-pill.today::after{content:''; display:block; width:4px; height:4px; border-radius:50%; background:var(--amber); margin:3px auto 0;}
+  .day-pill.active.today::after{background:#1B1D22;}
+
+  /* ---------- PERIOD LIST ---------- */
+  .period-list{display:flex; flex-direction:column; gap:7px; margin-bottom:20px;}
+  .period-row{display:flex; align-items:center; gap:10px; background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    padding:11px 12px; cursor:pointer; min-height:52px; text-align:left; width:100%;}
+  .period-row.empty{cursor:default; opacity:.55;}
+  .period-row.break-row{background:transparent; border-style:dashed; padding:6px 12px; opacity:.55; cursor:default; min-height:auto;}
+  .period-row.now-row{
+    background:linear-gradient(90deg, rgba(255,176,32,0.16), rgba(255,176,32,0.04));
+    border-color:var(--amber); box-shadow:0 0 0 1px var(--amber);
+  }
+  .period-row.now-row .p-code{color:var(--amber);}
+  .period-row.next-row{border-color:rgba(255,176,32,0.55);}
+  .p-time{flex-shrink:0; width:58px; font-family:'Space Mono',monospace; font-size:10.5px; color:var(--text-dim); display:flex; flex-direction:column; justify-content:center; line-height:1.4;}
+  .p-bar{width:4px; align-self:stretch; border-radius:3px; flex-shrink:0;}
+  .p-body{flex:1; min-width:0; display:flex; flex-direction:column; justify-content:center;}
+  .p-code{font-family:'Manrope',sans-serif; font-weight:800; font-size:13.5px; display:flex; align-items:center; gap:6px; color:var(--text);}
+  .p-sub{font-size:10.5px; color:var(--text-dim); margin-top:1px;}
+  .p-break-label{font-size:10.5px; color:var(--text-faint); letter-spacing:.3px; font-weight:600;}
+  .next-tag{flex-shrink:0; font-family:'Space Mono',monospace; font-size:8.5px; font-weight:700; letter-spacing:.5px; color:var(--amber);
+    border:1px solid var(--amber); border-radius:5px; padding:4px 7px;}
+
+  /* ---------- GRID VIEW (periods as rows, days as columns) ---------- */
+  .gridwrap{border:1px solid var(--line); border-radius:var(--radius); background:var(--panel); overflow:auto;
+    max-height:min(64vh, 540px); margin-bottom:20px;
+    scrollbar-width:thin; scrollbar-color:var(--line-strong) transparent;}
+  .gridwrap::-webkit-scrollbar{width:7px; height:7px;}
+  .gridwrap::-webkit-scrollbar-track{background:transparent;}
+  .gridwrap::-webkit-scrollbar-thumb{background:var(--line-strong); border-radius:4px;}
+  .gridwrap::-webkit-scrollbar-thumb:hover{background:var(--text-faint);}
+  .gridwrap::-webkit-scrollbar-button{display:none; width:0; height:0;}
+  .gridwrap::-webkit-scrollbar-corner{background:transparent;}
+  table.tt{border-collapse:collapse; width:100%; table-layout:fixed;}
+  table.tt thead th{position:sticky; top:0; z-index:2; background:var(--panel); font-family:'Space Mono',monospace; font-size:10px;
+    color:var(--text-dim); font-weight:700; padding:9px 3px; text-align:center; border-bottom:1px solid var(--line-strong);}
+  table.tt thead th.corner{position:sticky; left:0; z-index:3; width:52px;}
+  table.tt thead th.today-h{color:var(--amber);}
+  table.tt td{border-bottom:1px solid var(--line); padding:5px 4px; vertical-align:middle; text-align:center;}
+  table.tt td.time-lbl{font-family:'Space Mono',monospace; font-size:9px; color:var(--text-dim); text-align:left; padding-left:9px;
+    white-space:nowrap; position:sticky; left:0; z-index:1; background:var(--panel); width:52px;}
+  table.tt td.today-col{background:rgba(255,176,32,0.055);}
+  tr.break-row-grid td{padding:4px 4px;}
+  tr.break-row-grid .break-span{color:var(--text-faint); font-size:8.5px; letter-spacing:.5px; text-transform:uppercase; text-align:center;
+    background:repeating-linear-gradient(135deg, var(--line) 0, var(--line) 1px, transparent 1px, transparent 6px); border-radius:5px; padding:4px 0;}
+  tr.break-row-grid.now-break{background:rgba(255,176,32,0.07);}
+  tr.break-row-grid.now-break .break-span{color:var(--amber); font-weight:700;}
+  .cell-block{border-radius:8px; padding:9px 2px; font-size:10px; font-weight:800; color:#0D0F13; cursor:pointer; line-height:1.15;
+    min-height:38px; width:100%; display:flex; align-items:center; justify-content:center; border:1px solid rgba(0,0,0,0.16);}
+  .cell-block.cell-now{box-shadow:0 0 0 2px var(--amber), 0 0 0 1px rgba(0,0,0,0.16) inset;}
+  .cell-block.cell-next{box-shadow:0 0 0 2px rgba(255,176,32,0.45), 0 0 0 1px rgba(0,0,0,0.16) inset;}
+  .cell-empty{color:var(--text-faint); background:transparent !important; border:none !important; box-shadow:none !important;}
+
+  /* ---------- BOTTOM SHEET ---------- */
+  .sheet-overlay{position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:50; opacity:0; pointer-events:none; transition:opacity .2s ease;}
+  .sheet-overlay.open{opacity:1; pointer-events:auto;}
+  .sheet{position:fixed; left:0; right:0; bottom:0; z-index:51; background:var(--panel); border-radius:18px 18px 0 0;
+    padding:18px 18px calc(24px + var(--safe-b)); max-width:640px; margin:0 auto; transform:translateY(100%); transition:transform .25s ease;
+    border-top:1px solid var(--line-strong);}
+  .sheet-overlay.open .sheet{transform:translateY(0);}
+  .sheet-handle{width:36px; height:4px; border-radius:3px; background:var(--line-strong); margin:0 auto 14px;}
+  .sheet-title{font-family:'Manrope',sans-serif; font-weight:800; font-size:17px; margin-bottom:2px;}
+  .sheet-code{font-family:'Space Mono',monospace; font-size:11px; color:var(--text-dim); margin-bottom:14px;}
+  .sheet-row{display:flex; justify-content:space-between; padding:10px 0; border-top:1px solid var(--line); font-size:12.5px;}
+  .sheet-row .k{color:var(--text-dim);}
+  .sheet-row .v{font-weight:600; text-align:right;}
+  .sheet-empty-note{font-size:11.5px; color:var(--text-dim); background:var(--panel-soft); border-radius:8px; padding:10px 12px; margin-top:12px;}
+  .sheet-sessions{margin-top:12px; font-size:11px; color:var(--text-dim);}
+  .sheet-sessions .sess-item{display:flex; justify-content:space-between; padding:6px 0; border-top:1px solid var(--line);}
+
+  /* ---------- TIMELINE TAB ---------- */
+  .progress-card{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:16px; margin-bottom:18px;}
+  .progress-top{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px;}
+  .progress-top .lbl{font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.5px; font-weight:700;}
+  .progress-top .pct{font-family:'Space Mono',monospace; font-size:16px; color:var(--amber); font-weight:700;}
+  .progress-track{height:6px; background:var(--panel-raised); border-radius:4px; overflow:hidden;}
+  .progress-fill{height:100%; background:var(--amber); border-radius:4px;}
+  .progress-note{font-size:10.5px; color:var(--text-faint); margin-top:8px;}
+  .milestone{display:flex; gap:12px; padding:14px 4px; border-top:1px solid var(--line);}
+  .milestone:first-child{border-top:none;}
+  .m-date{flex-shrink:0; width:52px; text-align:center; font-family:'Space Mono',monospace;}
+  .m-date .dnum{font-size:20px; font-weight:700; line-height:1; color:var(--text);}
+  .m-date .dmon{font-size:9px; color:var(--text-dim); text-transform:uppercase; margin-top:2px;}
+  .m-body{flex:1; min-width:0;}
+  .m-label{font-family:'Manrope',sans-serif; font-weight:700; font-size:13px;}
+  .m-sem{display:inline-block; font-size:9px; font-weight:700; letter-spacing:.4px; padding:2px 6px; border-radius:4px; margin-top:4px;}
+  .m-sem.III{background:rgba(91,141,239,0.15); color:#5B8DEF;}
+  .m-sem.IV{background:rgba(111,191,91,0.15); color:#6FBF5B;}
+  .m-count{font-family:'Space Mono',monospace; font-size:10.5px; color:var(--text-dim); margin-top:4px;}
+  .m-count.past{color:var(--text-faint);}
+  .m-count.imminent{color:var(--amber); font-weight:700;}
+
+  /* ---------- LOOKUP TAB ---------- */
+  .searchbox{width:100%; padding:13px 14px; border-radius:10px; border:1px solid var(--line-strong); background:var(--panel);
+    color:var(--text); font-size:13px; font-family:'Inter',sans-serif; margin-bottom:12px; min-height:44px;}
+  .searchbox::placeholder{color:var(--text-faint);}
+  .searchbox:focus{outline:none; border-color:var(--amber);}
+  .lookup-result{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:12px 14px; margin-bottom:8px; cursor:pointer;}
+  .lookup-result .lr-title{font-family:'Manrope',sans-serif; font-weight:800; font-size:13.5px; margin-bottom:6px;}
+  .lookup-result .lr-sess{display:flex; justify-content:space-between; font-size:11px; color:var(--text-dim); padding:4px 0; border-top:1px solid var(--line);}
+  .lookup-empty{text-align:center; color:var(--text-faint); font-size:12px; padding:30px 10px; line-height:1.6;}
+
+  .section-title{font-family:'Manrope',sans-serif; font-weight:800; font-size:13.5px; margin:2px 0 10px; display:flex; align-items:center; gap:6px;}
+  .section-title .n{font-family:'Space Mono',monospace; color:var(--amber); font-size:11px;}
+
+  /* ---------- BOTTOM NAV ---------- */
+  nav.bottomnav{position:fixed; left:0; right:0; bottom:0; z-index:40; background:var(--panel); border-top:1px solid var(--line);
+    display:flex; padding-bottom:var(--safe-b);}
+  .nav-btn{flex:1; background:none; border:none; color:var(--text-faint); display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:3px; padding:9px 4px 8px; cursor:pointer; min-height:58px;}
+  .nav-btn .ni{font-size:17px; line-height:1;}
+  .nav-btn .nl{font-size:10px; font-weight:700; letter-spacing:.3px;}
+  .nav-btn.active{color:var(--amber);}
+</style>
+</head>
+<body>
+
+<header id="pageHeader">
+  <div class="toprow">
+    <div class="mark" aria-hidden="true" style="font-family:'Manrope',sans-serif; font-weight:800; font-size:13px; color:#F1EFE9; letter-spacing:.3px;">MK</div>
+    <div class="titleblock">
+      <h1>Semester III</h1>
+      <div class="sub">PSGIM · AUG–NOV 2026</div>
+    </div>
+    <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme">◐</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===== WEEK TAB ===== -->
+  <div id="view-week">
+    <div class="ticker-panel">
+      <div class="ticker-head" id="nowNextBoard"></div>
+      <div class="ticker-tape"><div class="ticker-track" id="tickerTrack"></div></div>
+    </div>
+
+    <button class="milestone-chip" id="milestoneChip" onclick="switchTab('timeline')"></button>
+
+    <div class="viewtoggle">
+      <button class="now-btn" onclick="jumpToNow()"><span class="live-dot pulsing"></span>Now</button>
+      <div class="vt-group">
+        <button class="vt-btn active" id="vt-cards" onclick="setWeekView('cards')">Day</button>
+        <button class="vt-btn" id="vt-grid" onclick="setWeekView('grid')">Grid</button>
+      </div>
+    </div>
+
+    <div class="legend" id="legend"></div>
+
+    <div id="cardsView">
+      <div class="daypicker" id="dayPicker"></div>
+      <div class="period-list" id="periodList"></div>
+    </div>
+
+    <div id="gridView" style="display:none;">
+      <div class="gridwrap" id="gridWrap"><table class="tt" id="gridTable"></table></div>
+    </div>
+  </div>
+
+  <!-- ===== TIMELINE TAB ===== -->
+  <div id="view-timeline" style="display:none;">
+    <div class="progress-card">
+      <div class="progress-top"><span class="lbl">Semester III progress</span><span class="pct" id="progPct">0%</span></div>
+      <div class="progress-track"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+      <div class="progress-note" id="progNote"></div>
+    </div>
+    <div class="section-title">Key dates <span class="n" id="milestoneCount"></span></div>
+    <div id="milestones"></div>
+  </div>
+
+  <!-- ===== LOOKUP TAB ===== -->
+  <div id="view-lookup" style="display:none;">
+    <input class="searchbox" id="lookupInput" placeholder="Search faculty, room, or course…" oninput="renderLookup()">
+    <div id="lookupResults"></div>
+  </div>
+
+</main>
+
+<nav class="bottomnav">
+  <button class="nav-btn active" id="nav-week" onclick="switchTab('week')"><span class="ni">▦</span><span class="nl">Week</span></button>
+  <button class="nav-btn" id="nav-timeline" onclick="switchTab('timeline')"><span class="ni">◷</span><span class="nl">Timeline</span></button>
+  <button class="nav-btn" id="nav-lookup" onclick="switchTab('lookup')"><span class="ni">⌕</span><span class="nl">Lookup</span></button>
+</nav>
+
+<div class="sheet-overlay" id="sheetOverlay" onclick="if(event.target===this) closeSheet()">
+  <div class="sheet" id="sheet">
+    <div class="sheet-handle"></div>
+    <div id="sheetContent"></div>
+  </div>
+</div>
+
+<script>
+/* ================= DATA ================= */
+const PERIODS = [
+  {i:1,  start:"08:30", end:"09:25"},
+  {i:2,  start:"09:25", end:"10:20"},
+  {i:3,  start:"10:20", end:"10:40", type:"break"},
+  {i:4,  start:"10:40", end:"11:35"},
+  {i:5,  start:"11:35", end:"12:30"},
+  {i:6,  start:"12:30", end:"13:40", type:"lunch"},
+  {i:7,  start:"13:40", end:"14:35"},
+  {i:8,  start:"14:35", end:"15:30"},
+  {i:9,  start:"15:30", end:"15:40", type:"break"},
+  {i:10, start:"15:40", end:"16:35"},
+  {i:11, start:"16:35", end:"17:30"},
+  {i:12, start:"17:30", end:"17:40", type:"break"},
+  {i:13, start:"17:40", end:"18:30"},
+];
+
+const SCHEDULE = {
+  Monday:    ["FD1","FD1",null,null,null,null,null,null,null,null,"PROJ",null,null],
+  Tuesday:   [null,null,null,null,"PROJ",null,null,null,null,null,"PM1",null,null],
+  Wednesday: ["IAPM1","IAPM1",null,"FD1","SM-A",null,"PROJ","PROJ",null,"PROJ",null,null,null],
+  Thursday:  [null,null,null,"SM-A","SM-A",null,"IAPM1","CLUB",null,"CLUB","CLUB",null,"CLUB"],
+  Friday:    [null,null,null,"PM1","PM1",null,"MFS1","MFS1",null,null,null,null,null],
+  Saturday:  [null,null,null,null,null,null,"BRS-A","BRS-A",null,"BRS-A","BRS-A",null,"BRS-A"],
+};
+const DAYS = Object.keys(SCHEDULE);
+
+const COURSES = {
+  IAPM1: {name:"Investment Analysis & Portfolio Management", code:"24GA03", faculty:"Dr. D. Susana", room:"Trading Lab", credits:3, color:"var(--c-iapm1)"},
+  FD1:   {name:"Financial Derivatives", code:"24GA04", faculty:"Dr. J. Ravi Shankar", room:"Trading Lab", credits:3, color:"var(--c-fd1)"},
+  PM1:   {name:"Project Management", code:"24GD03", faculty:"Dr V Harish", room:"Room 411", credits:3, color:"var(--c-pm1)"},
+  MFS1:  {name:"Marketing of Financial Services", code:"24VA04", faculty:"Dr. Nithya", room:"Trading Lab", credits:2, color:"var(--c-mfs1)"},
+  "SM-A":{name:"Strategic Management (Section A)", code:"24GM32", faculty:"Dr. Uma Maheswari A", room:"Room 001", credits:3, color:"var(--c-sma)"},
+  "BRS-A":{name:"Board Room Simulation (Section A)", code:"24GM33", faculty:"Dr. M. Ganeshwari", room:"Room 001", credits:2, color:"var(--c-brsa)"},
+  PROJ:  {name:"Project Work (Phase I)", code:"24GM34", faculty:"All Faculty", room:"—", credits:6, color:"var(--c-proj)"},
+  CLUB:  {name:"Club Activity", code:null, faculty:null, room:null, credits:null, color:"var(--c-club)"},
+};
+
+const KEYDATES = [
+  {date:"2026-07-20", label:"Semester III Project Commences", sem:"III"},
+  {date:"2026-10-15", label:"Project Interim Review", sem:"III"},
+  {date:"2026-11-13", label:"Project Viva Voce", sem:"III"},
+  {date:"2026-11-20", label:"Last Working Day", sem:"III"},
+  {date:"2026-11-23", label:"Semester Exams", sem:"III"},
+  {date:"2026-12-09", label:"Classes Start Date", sem:"IV"},
+  {date:"2027-02-27", label:"Completion of Project", sem:"IV"},
+  {date:"2027-03-25", label:"Last Working Day", sem:"IV"},
+  {date:"2027-03-29", label:"Semester Exams", sem:"IV"},
+  {date:"2027-05-15", label:"Graduation Day", sem:"IV"},
+];
+const TERM_START = new Date("2026-07-20T00:00:00");
+const TERM_END   = new Date("2026-11-23T23:59:59");
+
+const MONTHS_SHORT = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+const DAY_ABBR = {Monday:"MON",Tuesday:"TUE",Wednesday:"WED",Thursday:"THU",Friday:"FRI",Saturday:"SAT"};
+
+let activeSubjectFilter = "all";
+let weekView = "cards";
+let selectedDay = null;
+
+/* ================= INIT ================= */
+function todayName(){
+  const n = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][new Date().getDay()];
+  return SCHEDULE[n] ? n : null;
+}
+selectedDay = todayName() || "Monday";
+
+function init(){
+  if(window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches){
+    document.documentElement.setAttribute('data-theme','light');
+  }
+  renderLegend();
+  renderDayPicker();
+  renderPeriodList();
+  renderGrid();
+  renderNowNext();
+  renderTicker();
+  renderMilestoneChip();
+  renderTimeline();
+  scrollToCurrentRow();
+  setInterval(()=>{ renderNowNext(); renderMilestoneChip(); }, 30000);
+}
+
+/* ================= LEGEND ================= */
+function renderLegend(){
+  const el = document.getElementById('legend');
+  let html = `<button class="chip ${activeSubjectFilter==='all'?'active':''}" onclick="setFilter('all')">All</button>`;
+  Object.keys(COURSES).forEach(code=>{
+    html += `<button class="chip ${activeSubjectFilter===code?'active':''}" onclick="setFilter('${code}')">
+      <span class="sw" style="background:${COURSES[code].color}"></span>${code}
+    </button>`;
+  });
+  el.innerHTML = html;
+}
+function setFilter(code){
+  activeSubjectFilter = code;
+  renderLegend(); renderPeriodList(); renderGrid();
+}
+
+/* ================= DAY PICKER + CARD LIST ================= */
+function renderDayPicker(){
+  const el = document.getElementById('dayPicker');
+  const tn = todayName();
+  el.innerHTML = DAYS.map(d=>`
+    <button class="day-pill ${selectedDay===d?'active':''} ${tn===d?'today':''}" onclick="selectDay('${d}')">
+      <span class="dn">${DAY_ABBR[d]}</span>${d.slice(0,3)}
+    </button>`).join('');
+}
+function selectDay(d){
+  selectedDay = d;
+  renderDayPicker();
+  renderPeriodList();
+  if(d===todayName()) scrollToCurrentRow();
+}
+
+function fmtTime(t){
+  const [h,m] = t.split(':').map(Number);
+  const ap = h>=12?'pm':'am';
+  const hh = h%12===0?12:h%12;
+  return hh+(m?':'+String(m).padStart(2,'0'):'')+ap;
+}
+
+function nextClassAfter(nowMin, sched){
+  for(let idx=0; idx<PERIODS.length; idx++){
+    const p = PERIODS[idx];
+    if(p.type) continue;
+    if(toMin(p.start) > nowMin && sched[idx]){ return {period:p, code:sched[idx]}; }
+  }
+  return null;
+}
+
+function renderPeriodList(){
+  const el = document.getElementById('periodList');
+  const sched = SCHEDULE[selectedDay];
+  const tn = todayName();
+  const isToday = selectedDay === tn;
+  const nowMin = currentMinutes();
+  const nextSlot = isToday ? nextClassAfter(nowMin, sched) : null;
+  let html = '';
+  PERIODS.forEach((p,idx)=>{
+    if(p.type==='break' || p.type==='lunch'){
+      const isNowBreak = isToday && nowMin>=toMin(p.start) && nowMin<toMin(p.end);
+      html += `<div class="period-row break-row" style="${isNowBreak?'opacity:.85; border-color:var(--amber)':''}">
+        <div class="p-time">${fmtTime(p.start)}–${fmtTime(p.end)}</div>
+        <div class="p-body"><div class="p-break-label" style="${isNowBreak?'color:var(--amber)':''}">${p.type==='lunch'?'Lunch break':'Short break'}${isNowBreak?' · now':''}</div></div></div>`;
+      return;
+    }
+    const code = sched[idx];
+    const isNow = isToday && nowMin>=toMin(p.start) && nowMin<toMin(p.end);
+    const isNext = isToday && nextSlot && nextSlot.period.i===p.i;
+    if(code && activeSubjectFilter!=='all' && code!==activeSubjectFilter){
+      html += `<div class="period-row empty"><div class="p-time">${fmtTime(p.start)}–${fmtTime(p.end)}</div><div class="p-body"><div class="p-sub" style="opacity:.4">filtered out</div></div></div>`;
+      return;
+    }
+    if(code){
+      const c = COURSES[code];
+      html += `<button class="period-row ${isNow?'now-row':''} ${isNext?'next-row':''}" onclick="openSheet('${code}')">
+        <div class="p-time">${fmtTime(p.start)}–${fmtTime(p.end)}</div>
+        <div class="p-bar" style="background:${c.color}"></div>
+        <div class="p-body">
+          <div class="p-code">${code}${isNow?'<span class="live-dot pulsing"></span>':''}</div>
+          <div class="p-sub">${c.room||'No room listed'} · ${c.faculty||'No faculty listed'}</div>
+        </div>
+        ${isNext?'<div class="next-tag">NEXT</div>':''}
+      </button>`;
+    } else {
+      html += `<div class="period-row empty"><div class="p-time">${fmtTime(p.start)}–${fmtTime(p.end)}</div>
+        <div class="p-body"><div class="p-sub">Free period</div></div></div>`;
+    }
+  });
+  el.innerHTML = html;
+}
+
+function scrollToCurrentRow(smooth){
+  requestAnimationFrame(()=>{
+    const el = document.querySelector('#periodList .now-row') || document.querySelector('#periodList .next-row');
+    if(el){ el.scrollIntoView({behavior: smooth ? 'smooth' : 'auto', block:'center'}); }
+  });
+}
+
+/* Jump-to-now button: works in both Day and Grid view, highlights + scrolls
+   to whichever row/cell is current (or next, if nothing is live right now). */
+function jumpToNow(){
+  const tn = todayName();
+  if(weekView === 'grid'){
+    requestAnimationFrame(()=>{
+      const el = document.querySelector('#gridTable .cell-now, #gridTable .cell-next') || document.querySelector('#gridTable tr.now-break');
+      if(el){ (el.closest('tr') || el).scrollIntoView({behavior:'smooth', block:'center'}); }
+    });
+    return;
+  }
+  if(tn && selectedDay !== tn){
+    selectedDay = tn;
+    renderDayPicker();
+    renderPeriodList();
+  }
+  scrollToCurrentRow(true);
+}
+
+/* ================= GRID VIEW (periods as rows, days as columns) ================= */
+function renderGrid(){
+  const el = document.getElementById('gridTable');
+  const tn = todayName();
+  const {now, next} = findNowNext();
+  const nextClass = tn ? nextClassAfter(currentMinutes(), SCHEDULE[tn]) : null;
+
+  let theadCells = `<th class="corner"></th>` + DAYS.map(d=>`<th class="${d===tn?'today-h':''}">${d.slice(0,3)}</th>`).join('');
+  let head = `<thead><tr>${theadCells}</tr></thead>`;
+
+  let bodyRows = '';
+  PERIODS.forEach((p, idx)=>{
+    if(p.type){
+      const isNowBreak = tn && now && now.period.i===p.i && !now.code;
+      bodyRows += `<tr class="break-row-grid ${isNowBreak?'now-break':''}">
+        <td class="time-lbl">${fmtTime(p.start)}</td>
+        <td class="break-span" colspan="${DAYS.length}">${p.type==='lunch'?'Lunch':'Break'}</td>
+      </tr>`;
+      return;
+    }
+    let cells = '';
+    DAYS.forEach(d=>{
+      const code = SCHEDULE[d][idx];
+      const isToday = d===tn;
+      const isNowCell = isToday && now && !now.type && now.period.i===p.i;
+      const isNextCell = isToday && nextClass && nextClass.period.i===p.i;
+      const dim = code && activeSubjectFilter!=='all' && code!==activeSubjectFilter;
+      const ring = code ? (isNowCell?'cell-now':(isNextCell?'cell-next':'')) : '';
+      if(code){
+        const c = COURSES[code];
+        cells += `<td class="${isToday?'today-col':''}"><button class="cell-block ${ring}" style="background:${c.color}; opacity:${dim?0.25:1}" onclick="openSheet('${code}')">${code}</button></td>`;
+      } else {
+        cells += `<td class="${isToday?'today-col':''}"><div class="cell-block cell-empty">–</div></td>`;
+      }
+    });
+    bodyRows += `<tr><td class="time-lbl">${fmtTime(p.start)}</td>${cells}</tr>`;
+  });
+  el.innerHTML = head + `<tbody>${bodyRows}</tbody>`;
+}
+
+function setWeekView(v){
+  weekView = v;
+  document.getElementById('vt-cards').classList.toggle('active', v==='cards');
+  document.getElementById('vt-grid').classList.toggle('active', v==='grid');
+  document.getElementById('cardsView').style.display = v==='cards' ? 'block' : 'none';
+  document.getElementById('gridView').style.display = v==='grid' ? 'block' : 'none';
+  if(v==='grid'){
+    requestAnimationFrame(()=>{
+      const el = document.querySelector('#gridTable .cell-now');
+      if(el){ el.closest('tr').scrollIntoView({behavior:'auto', block:'center'}); }
+    });
+  }
+}
+
+/* ================= NOW / NEXT TICKER HEAD ================= */
+function toMin(t){ const [h,m]=t.split(':').map(Number); return h*60+m; }
+function currentMinutes(){ const n=new Date(); return n.getHours()*60+n.getMinutes(); }
+
+function findNowNext(){
+  const tn = todayName();
+  if(!tn) return {now:null, next:null, day:null};
+  const sched = SCHEDULE[tn];
+  const nowMin = currentMinutes();
+  let now=null, next=null;
+  for(let idx=0; idx<PERIODS.length; idx++){
+    const p = PERIODS[idx];
+    if(nowMin>=toMin(p.start) && nowMin<toMin(p.end)){ now = {period:p, code: p.type?null:sched[idx], type:p.type||null}; }
+    if(!next && toMin(p.start) > nowMin){ next = {period:p, code: p.type?null:sched[idx], type:p.type||null}; }
+  }
+  return {now, next, day:tn};
+}
+
+/* Looks forward day-by-day (today onward, wrapping through next week) for the
+   next actual class — used to fill the Next panel once today has no more
+   sessions, or on days with no schedule at all (e.g. Sunday). */
+const REAL_DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+function findNextClassAcrossWeek(){
+  const now = new Date();
+  const nowMin = currentMinutes();
+  for(let offset=0; offset<8; offset++){
+    const d = new Date(now);
+    d.setDate(d.getDate()+offset);
+    const dn = REAL_DAY_NAMES[d.getDay()];
+    const sched = SCHEDULE[dn];
+    if(!sched) continue;
+    for(let idx=0; idx<PERIODS.length; idx++){
+      const p = PERIODS[idx];
+      if(p.type || !sched[idx]) continue;
+      if(offset===0 && toMin(p.start) <= nowMin) continue;
+      return {code:sched[idx], dayName:dn, period:p, offsetDays:offset};
+    }
+  }
+  return null;
+}
+function describeSlot(slot){
+  if(!slot) return {main:"—", meta:"Nothing scheduled", dim:true};
+  if(slot.type==='break') return {main:"Break", meta:fmtTime(slot.period.start)+"–"+fmtTime(slot.period.end), dim:true};
+  if(slot.type==='lunch') return {main:"Lunch", meta:fmtTime(slot.period.start)+"–"+fmtTime(slot.period.end), dim:true};
+  if(!slot.code) return {main:"Free period", meta:fmtTime(slot.period.start)+"–"+fmtTime(slot.period.end), dim:true};
+  const c = COURSES[slot.code];
+  return {main:slot.code, meta:(c.room||'—')+" · "+(c.faculty||'—')+" · "+fmtTime(slot.period.start)+"–"+fmtTime(slot.period.end), dim:false};
+}
+
+function renderNowNext(){
+  const el = document.getElementById('nowNextBoard');
+  const {now, next, day} = findNowNext();
+
+  const nowDesc = day ? describeSlot(now) : {main:"Markets closed", meta:"No classes scheduled today", dim:true};
+
+  let nextDesc;
+  if(next){
+    nextDesc = describeSlot(next);
+  } else {
+    const upcoming = findNextClassAcrossWeek();
+    if(upcoming){
+      const c = COURSES[upcoming.code];
+      const dayLabel = upcoming.offsetDays===0 ? 'Today' : upcoming.offsetDays===1 ? 'Tomorrow' : upcoming.dayName.slice(0,3);
+      nextDesc = {main:upcoming.code, meta:dayLabel+' '+fmtTime(upcoming.period.start)+' · '+(c.room||'—'), dim:false};
+    } else {
+      nextDesc = {main:"—", meta:"No more sessions this week", dim:true};
+    }
+  }
+
+  el.innerHTML = `
+    <div class="tk-col">
+      <div class="tk-label"><span class="live-dot ${nowDesc.dim?'':'pulsing'}"></span>Now</div>
+      <div class="tk-main ${nowDesc.dim?'dim':''}">${nowDesc.main}</div><div class="tk-meta">${nowDesc.meta}</div>
+    </div>
+    <div class="tk-col">
+      <div class="tk-label">Next</div>
+      <div class="tk-main ${nextDesc.dim?'dim':''}">${nextDesc.main}</div><div class="tk-meta">${nextDesc.meta}</div>
+    </div>`;
+}
+
+/* ================= TICKER TAPE (today's remaining lineup) ================= */
+function renderTicker(){
+  const track = document.getElementById('tickerTrack');
+  const tn = todayName();
+  if(!tn){ track.innerHTML = `<span>No sessions scheduled today · Enjoy the day off</span>`; return; }
+  const sched = SCHEDULE[tn];
+  const nowMin = currentMinutes();
+  const items = [];
+  PERIODS.forEach((p,idx)=>{
+    if(p.type) return;
+    const code = sched[idx];
+    if(code){
+      const past = toMin(p.end) <= nowMin;
+      items.push(`<span class="${past?'tk-past':''}"><b>${code}</b> ${fmtTime(p.start)}–${fmtTime(p.end)} · ${COURSES[code].room||'—'}</span>`);
+    }
+  });
+  if(!items.length){ track.innerHTML = `<span>No classes scheduled for ${tn} · Free day</span>`; return; }
+  const list = items.join('<span>·</span>');
+  track.innerHTML = list + list;
+}
+
+/* ================= MILESTONE CHIP ================= */
+function nextMilestone(){
+  const now = new Date();
+  const today0 = new Date(now.toDateString());
+  const upcoming = KEYDATES.map(k=>({...k, d:new Date(k.date+"T00:00:00")})).filter(k=>k.d>=today0).sort((a,b)=>a.d-b.d);
+  return upcoming[0] || null;
+}
+function renderMilestoneChip(){
+  const el = document.getElementById('milestoneChip');
+  const m = nextMilestone();
+  if(!m){ el.style.display='none'; return; }
+  const today0 = new Date(new Date().toDateString());
+  const diffDays = Math.round((m.d - today0) / 86400000);
+  const countTxt = diffDays===0 ? "Today" : "in "+diffDays+" day"+(diffDays===1?'':'s');
+  el.innerHTML = `<span class="mc-tag">Next up</span>
+    <span class="mc-body"><b>${m.label}</b> · Sem ${m.sem}</span>
+    <span class="mc-count">${countTxt}</span>
+    <span class="mc-arrow">›</span>`;
+}
+
+/* ================= BOTTOM SHEET ================= */
+function openSheet(code){
+  const c = COURSES[code];
+  if(!c) return;
+  let sessions = [];
+  DAYS.forEach(d=>{
+    SCHEDULE[d].forEach((v,idx)=>{ if(v===code) sessions.push(`${d.slice(0,3)} · ${fmtTime(PERIODS[idx].start)}–${fmtTime(PERIODS[idx].end)}`); });
+  });
+  const hasDetails = !!c.code;
+  document.getElementById('sheetContent').innerHTML = `
+    <div class="sheet-title">${c.name}</div>
+    <div class="sheet-code mono">${code}${c.code ? ' · '+c.code : ''}</div>
+    ${hasDetails ? `
+      <div class="sheet-row"><span class="k">Faculty</span><span class="v">${c.faculty}</span></div>
+      <div class="sheet-row"><span class="k">Room</span><span class="v">${c.room}</span></div>
+      <div class="sheet-row"><span class="k">Credits</span><span class="v">${c.credits}</span></div>
+    ` : `<div class="sheet-empty-note">Extracurricular activity — no faculty or room is listed for this session in the timetable.</div>`}
+    <div class="sheet-sessions">
+      <div style="margin-bottom:4px; font-weight:700; color:var(--text)">Sessions this week (${sessions.length})</div>
+      ${sessions.map(s=>`<div class="sess-item"><span>${s}</span></div>`).join('')}
+    </div>`;
+  document.getElementById('sheetOverlay').classList.add('open');
+}
+function closeSheet(){ document.getElementById('sheetOverlay').classList.remove('open'); }
+
+/* ================= TIMELINE TAB ================= */
+function renderTimeline(){
+  const now = new Date();
+  let pct = ((now - TERM_START) / (TERM_END - TERM_START)) * 100;
+  pct = Math.max(0, Math.min(100, pct));
+  document.getElementById('progPct').textContent = Math.round(pct)+'%';
+  document.getElementById('progFill').style.width = pct+'%';
+  const note = now < TERM_START ? "Semester III hasn't started yet." :
+               now > TERM_END ? "Semester III has concluded." :
+               "From project commencement to semester exams.";
+  document.getElementById('progNote').textContent = note;
+  document.getElementById('milestoneCount').textContent = KEYDATES.length;
+
+  const el = document.getElementById('milestones');
+  el.innerHTML = KEYDATES.map(k=>{
+    const d = new Date(k.date+"T00:00:00");
+    const diffDays = Math.round((d - new Date(now.toDateString())) / 86400000);
+    let countTxt, countCls='';
+    if(diffDays === 0){ countTxt = "Today"; countCls='imminent'; }
+    else if(diffDays < 0){ countTxt = Math.abs(diffDays)+" days ago"; countCls='past'; }
+    else if(diffDays <= 14){ countTxt = "in "+diffDays+" days"; countCls='imminent'; }
+    else { countTxt = "in "+diffDays+" days"; }
+    return `<div class="milestone">
+      <div class="m-date"><div class="dnum">${d.getDate()}</div><div class="dmon">${MONTHS_SHORT[d.getMonth()]} ${d.getFullYear()}</div></div>
+      <div class="m-body"><div class="m-label">${k.label}</div><span class="m-sem ${k.sem}">SEM ${k.sem}</span><div class="m-count ${countCls}">${countTxt}</div></div>
+    </div>`;
+  }).join('');
+}
+
+/* ================= LOOKUP TAB ================= */
+function allSessions(){
+  let out = [];
+  DAYS.forEach(d=>{ SCHEDULE[d].forEach((code, idx)=>{ if(code) out.push({day:d, code, period:PERIODS[idx]}); }); });
+  return out;
+}
+function renderLookup(){
+  const q = (document.getElementById('lookupInput').value || '').trim().toLowerCase();
+  const el = document.getElementById('lookupResults');
+  if(!q){ el.innerHTML = `<div class="lookup-empty">Search by faculty name, room, or course code — e.g. "Trading Lab" or "Susana".</div>`; return; }
+  const sessions = allSessions().filter(s=>{
+    const c = COURSES[s.code];
+    return s.code.toLowerCase().includes(q) || (c.faculty||'').toLowerCase().includes(q) || (c.room||'').toLowerCase().includes(q) || c.name.toLowerCase().includes(q);
+  });
+  if(!sessions.length){ el.innerHTML = `<div class="lookup-empty">No matches.</div>`; return; }
+  const byCode = {};
+  sessions.forEach(s=>{ (byCode[s.code] = byCode[s.code]||[]).push(s); });
+  el.innerHTML = Object.keys(byCode).map(code=>{
+    const c = COURSES[code];
+    const list = byCode[code];
+    return `<div class="lookup-result" onclick="openSheet('${code}')">
+      <div class="lr-title">${code} · ${c.faculty||'—'} · ${c.room||'—'}</div>
+      ${list.map(s=>`<div class="lr-sess"><span>${s.day}</span><span>${fmtTime(s.period.start)}–${fmtTime(s.period.end)}</span></div>`).join('')}
+    </div>`;
+  }).join('');
+}
+
+/* ================= TABS / THEME ================= */
+function switchTab(t){
+  ['week','timeline','lookup'].forEach(x=>{
+    document.getElementById('nav-'+x).classList.toggle('active', x===t);
+    document.getElementById('view-'+x).style.display = x===t ? 'block' : 'none';
+  });
+  if(t==='timeline') renderTimeline();
+  if(t==='lookup') renderLookup();
+  if(t==='week') scrollToCurrentRow();
+}
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', cur==='light' ? 'dark' : 'light');
+}
+
+init();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); });
+}
+</script>
+</body>
+</html>
