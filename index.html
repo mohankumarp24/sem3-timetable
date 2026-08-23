@@ -45,11 +45,11 @@
   /* ---------- HEADER ---------- */
   header{position:sticky; top:0; z-index:30; background:var(--panel); border-bottom:1px solid var(--line); padding:11px 16px 10px;}
   .toprow{display:flex; align-items:center; gap:10px;}
-  .mark{width:34px; height:34px; border-radius:9px; flex-shrink:0; background:#0D0F13; border:1px solid rgba(255,255,255,0.1);
-    display:flex; align-items:center; justify-content:center;}
+  .mark{width:38px; height:38px; border-radius:10px; flex-shrink:0; background:#0D0F13; border:1px solid rgba(255,255,255,0.12);
+    display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,0.25);}
   .titleblock{flex:1; min-width:0;}
-  .titleblock h1{margin:0; font-size:14.5px; font-weight:800; font-family:'Manrope',sans-serif; line-height:1.2;}
-  .titleblock .sub{font-size:10.5px; color:var(--text-dim); letter-spacing:.4px; margin-top:1px;}
+  .titleblock h1{margin:0; font-size:16.5px; font-weight:900; font-family:'Manrope',sans-serif; line-height:1.15; letter-spacing:-.2px;}
+  .titleblock .sub{font-size:10.5px; font-weight:700; color:var(--text-dim); letter-spacing:.6px; margin-top:3px; text-transform:uppercase;}
   .icon-btn{width:44px; height:44px; border-radius:10px; border:1px solid var(--line-strong); background:var(--panel);
     color:var(--text); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px; flex-shrink:0;}
 
@@ -95,7 +95,7 @@
   .now-btn .live-dot{background:var(--amber);}
 
   /* ---------- LEGEND CHIPS ---------- */
-  .legend{display:flex; gap:5px; overflow-x:auto; padding-bottom:8px;}
+  .legend{display:flex; flex-wrap:wrap; gap:6px; padding-bottom:8px;}
   .legend::-webkit-scrollbar{display:none;}
   .chip{display:flex; align-items:center; gap:5px; flex-shrink:0; padding:6px 10px; border-radius:999px; border:1px solid var(--line-strong);
     background:var(--panel); font-size:10px; font-weight:700; color:var(--text-dim); cursor:pointer; min-height:28px;}
@@ -226,7 +226,7 @@
 
 <header id="pageHeader">
   <div class="toprow">
-    <div class="mark" aria-hidden="true" style="font-family:'Manrope',sans-serif; font-weight:800; font-size:13px; color:#F1EFE9; letter-spacing:.3px;">MK</div>
+    <div class="mark" aria-hidden="true" style="font-family:'Manrope',sans-serif; font-weight:900; font-size:14px; color:#F1EFE9; letter-spacing:.2px;">MK</div>
     <div class="titleblock">
       <h1>Semester III</h1>
       <div class="sub">PSGIM · AUG–NOV 2026</div>
@@ -366,6 +366,28 @@ function todayName(){
   return SCHEDULE[n] ? n : null;
 }
 selectedDay = todayName() || "Monday";
+let lastKnownToday = todayName();
+
+/* Re-renders everything that's date/time-dependent. Called on a timer while
+   the app is open, and again whenever the app comes back to the foreground —
+   phones suspend timers when the screen locks or the app is backgrounded, so
+   the timer alone can't be trusted to catch a day rollover on its own. */
+function refreshAll(){
+  const nowToday = todayName();
+  if(nowToday !== lastKnownToday){
+    // Only auto-advance the selected day if the person was viewing "today" —
+    // don't yank them off a day they deliberately picked.
+    if(selectedDay === lastKnownToday || selectedDay === null){ selectedDay = nowToday || "Monday"; }
+    lastKnownToday = nowToday;
+    renderDayPicker();
+  }
+  renderPeriodList();
+  renderGrid();
+  renderNowNext();
+  renderTicker();
+  renderMilestoneChip();
+  if(document.getElementById('view-timeline').style.display !== 'none'){ renderTimeline(); }
+}
 
 function init(){
   if(window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches){
@@ -380,7 +402,11 @@ function init(){
   renderMilestoneChip();
   renderTimeline();
   scrollToCurrentRow();
-  setInterval(()=>{ renderNowNext(); renderMilestoneChip(); }, 30000);
+
+  setInterval(refreshAll, 30000);
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden){ refreshAll(); } });
+  window.addEventListener('focus', refreshAll);
+  window.addEventListener('pageshow', refreshAll);
 }
 
 /* ================= LEGEND ================= */
@@ -395,7 +421,7 @@ function renderLegend(){
   el.innerHTML = html;
 }
 function setFilter(code){
-  activeSubjectFilter = code;
+  activeSubjectFilter = (code!=='all' && activeSubjectFilter===code) ? 'all' : code;
   renderLegend(); renderPeriodList(); renderGrid();
 }
 
@@ -621,7 +647,7 @@ function renderNowNext(){
   const el = document.getElementById('nowNextBoard');
   const {now, next, day} = findNowNext();
 
-  const nowDesc = day ? describeSlot(now) : {main:"Markets closed", meta:"No classes scheduled today", dim:true};
+  const nowDesc = day ? describeSlot(now) : {main:"No class today", meta:"Nothing scheduled today", dim:true};
 
   let nextDesc;
   if(next){
