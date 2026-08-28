@@ -296,8 +296,9 @@
       <div class="progress-top"><span class="lbl">Course load</span><span class="pct" id="courseCredits">0</span></div>
       <div class="progress-note" id="courseSummaryNote"></div>
     </div>
+    <input class="searchbox" id="courseSearchInput" placeholder="Search course, code, faculty, or room…" oninput="renderCourses()">
     <div class="section-title">All courses <span class="n" id="courseCount"></span></div>
-    <div class="course-table"><div id="courseList"></div></div>
+    <div id="courseListWrap"></div>
   </div>
 
   <!-- ===== TIMELINE TAB ===== -->
@@ -311,19 +312,12 @@
     <div id="milestones"></div>
   </div>
 
-  <!-- ===== LOOKUP TAB ===== -->
-  <div id="view-lookup" style="display:none;">
-    <input class="searchbox" id="lookupInput" placeholder="Search course, code, faculty, or room…" oninput="renderLookup()">
-    <div id="lookupResults"></div>
-  </div>
-
 </main>
 
 <nav class="bottomnav">
   <button class="nav-btn active" id="nav-week" onclick="switchTab('week')"><span class="ni">▦</span><span class="nl">Week</span></button>
   <button class="nav-btn" id="nav-courses" onclick="switchTab('courses')"><span class="ni">▤</span><span class="nl">Courses</span></button>
   <button class="nav-btn" id="nav-timeline" onclick="switchTab('timeline')"><span class="ni">◷</span><span class="nl">Timeline</span></button>
-  <button class="nav-btn" id="nav-lookup" onclick="switchTab('lookup')"><span class="ni">⌕</span><span class="nl">Lookup</span></button>
 </nav>
 
 <div class="sheet-overlay" id="sheetOverlay" onclick="if(event.target===this) closeSheet()">
@@ -852,16 +846,10 @@ function renderCourses(){
   document.getElementById('courseCredits').textContent = totalCredits;
   document.getElementById('courseSummaryNote').textContent =
     `${COURSE_ORDER.length} courses this semester · ~${weeklyHours.toFixed(1)} class hours/week on the grid`;
-  document.getElementById('courseCount').textContent = COURSE_ORDER.length;
-  document.getElementById('courseList').innerHTML = COURSE_ORDER.map(code => courseRowHTML(code)).join('');
-}
 
-/* ================= LOOKUP TAB ================= */
-function renderLookup(){
-  const q = (document.getElementById('lookupInput').value || '').trim().toLowerCase();
-  const el = document.getElementById('lookupResults');
-  if(!q){ el.innerHTML = `<div class="lookup-empty">Search by course code, course name, faculty, or room — e.g. "24GA04", "Trading Lab", or "Susana".</div>`; return; }
+  const q = (document.getElementById('courseSearchInput').value || '').trim().toLowerCase();
   const matches = COURSE_ORDER.filter(code=>{
+    if(!q) return true;
     const c = COURSES[code];
     return code.toLowerCase().includes(q) ||
       (c.code||'').toLowerCase().includes(q) ||
@@ -869,19 +857,24 @@ function renderLookup(){
       (c.faculty||'').toLowerCase().includes(q) ||
       (c.room||'').toLowerCase().includes(q);
   });
-  if(!matches.length){ el.innerHTML = `<div class="lookup-empty">No matches.</div>`; return; }
-  el.innerHTML = `<div class="course-table">${matches.map(code => courseRowHTML(code, {showSessions:true})).join('')}</div>`;
+
+  document.getElementById('courseCount').textContent = q ? `${matches.length} of ${COURSE_ORDER.length}` : COURSE_ORDER.length;
+  const listEl = document.getElementById('courseListWrap');
+  if(!matches.length){
+    listEl.innerHTML = `<div class="lookup-empty">No matches.</div>`;
+  } else {
+    listEl.innerHTML = `<div class="course-table">${matches.map(code => courseRowHTML(code, {showSessions:true})).join('')}</div>`;
+  }
 }
 
 /* ================= TABS / THEME ================= */
 function switchTab(t){
-  ['week','courses','timeline','lookup'].forEach(x=>{
+  ['week','courses','timeline'].forEach(x=>{
     document.getElementById('nav-'+x).classList.toggle('active', x===t);
     document.getElementById('view-'+x).style.display = x===t ? 'block' : 'none';
   });
   if(t==='courses') renderCourses();
   if(t==='timeline') renderTimeline();
-  if(t==='lookup') renderLookup();
   if(t==='week') scrollToCurrentRow();
 }
 function toggleTheme(){
