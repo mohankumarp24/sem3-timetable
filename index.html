@@ -453,7 +453,7 @@ function init(){
 function renderLegend(){
   const el = document.getElementById('legend');
   let html = `<button class="chip ${activeSubjectFilter==='all'?'active':''}" onclick="setFilter('all')">All</button>`;
-  Object.keys(COURSES).forEach(code=>{
+  Object.keys(COURSES).filter(code => sessionsPerWeek(code) > 0).forEach(code=>{
     html += `<button class="chip ${activeSubjectFilter===code?'active':''}" onclick="setFilter('${code}')">
       <span class="sw" style="background:${COURSES[code].color}"></span>${code}
     </button>`;
