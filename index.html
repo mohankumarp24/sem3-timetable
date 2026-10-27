@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="Sem III">
 <meta name="theme-color" id="themeColorMeta" content="#12161C">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -373,6 +373,134 @@
   .cr-credits .lbl{font-size:7px; color:var(--text-dim); font-weight:700; margin-top:1px;}
   .lookup-empty{text-align:center; color:var(--text-faint); font-size:12px; padding:30px 10px; line-height:1.6;}
 
+
+  /* ============ WEEK: KEY DATE + EXAM STRIP ============ */
+  .strip2{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;}
+  .strip2.single{grid-template-columns:1fr;}
+  .strip2 .milestone-chip{margin-bottom:0; padding:7px 8px 7px 7px; gap:9px; min-width:0;}
+  .mc-body .k b{color:var(--text); font-weight:700;}
+  .mc-body .k b.hot{color:var(--amber);}
+  .mc-body .l span{font-family:'Inter',sans-serif; font-weight:500; font-size:11px; color:var(--text-dim); margin-left:4px;}
+  .exam-chip{border-color:color-mix(in srgb, var(--sc, var(--amber)) 45%, var(--line)); background:color-mix(in srgb, var(--sc, var(--amber)) 9%, var(--panel));}
+  .exam-chip .mc-date{background:color-mix(in srgb, var(--sc) 24%, var(--panel-raised));}
+  .exam-chip .mc-date .m{color:var(--text);}
+  .exam-chip.live{animation:chip-live 1.8s ease-in-out infinite;}
+  @keyframes chip-live{50%{box-shadow:0 0 0 3px color-mix(in srgb, var(--sc) 35%, transparent);}}
+
+  /* ============ NAV BADGE ============ */
+  .nav-btn .ni{position:relative;}
+  .nbadge{position:absolute; top:-4px; right:3px; min-width:20px; height:16px; padding:0 5px; border-radius:8px; background:var(--amber); color:var(--amber-ink);
+    font-family:'Space Mono',monospace; font-size:8.5px; font-weight:700; line-height:16px; text-align:center; box-shadow:0 0 0 2px var(--panel); letter-spacing:-.2px;}
+  .nbadge.hot{animation:badge-ring 1.8s ease-out infinite;}
+  .nbadge.live{background:var(--live); color:#0B0D12; animation:badge-ring-g 1.4s ease-out infinite;}
+  @keyframes badge-ring{0%{box-shadow:0 0 0 2px var(--panel), 0 0 0 2px color-mix(in srgb, var(--amber) 70%, transparent);} 100%{box-shadow:0 0 0 2px var(--panel), 0 0 0 9px transparent;}}
+  @keyframes badge-ring-g{0%{box-shadow:0 0 0 2px var(--panel), 0 0 0 2px rgba(95,214,138,.7);} 100%{box-shadow:0 0 0 2px var(--panel), 0 0 0 9px transparent;}}
+
+  /* ============ EXAMS TAB ============ */
+  .ex-hero{position:relative; overflow:hidden; border-radius:var(--radius); padding:14px 14px 13px; margin-bottom:18px; color:#EEF0F3; --sc:#FFB020;
+    background:linear-gradient(180deg,#0E1116 0%, #08090C 100%); border:1px solid rgba(255,255,255,0.08); box-shadow:0 10px 30px -12px rgba(0,0,0,.55);}
+  [data-theme="light"] .ex-hero{background:linear-gradient(180deg,#1A1E25 0%, #12151A 100%); box-shadow:0 12px 28px -14px rgba(16,22,32,.45);}
+  .ex-hero::before{content:''; position:absolute; top:0; left:0; right:0; height:1.5px; pointer-events:none;
+    background:linear-gradient(90deg, transparent, var(--sc), transparent) no-repeat; background-size:35% 100%; animation:tk-scan 5.5s linear infinite;}
+  .ex-top{display:flex; align-items:center; gap:6px; font-family:'Space Mono',monospace; font-size:9px; letter-spacing:1.4px; text-transform:uppercase; color:#8A90A0; font-weight:700; min-height:20px;}
+  .ex-top .slot{margin-left:auto; text-transform:none; letter-spacing:.2px; font-size:9.5px; color:#D7DAE0; background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.10); border-radius:6px; padding:2px 7px;}
+  .ex-main{display:flex; gap:11px; margin:10px 0 13px; animation:tk-in .5s var(--ease) both;}
+  .ex-bar{width:4px; flex-shrink:0; border-radius:3px; background:var(--sc); animation:tk-breathe 2.8s ease-in-out infinite; --sc:inherit;}
+  .ex-code{font-family:'Space Mono',monospace; font-size:30px; font-weight:700; color:#F5D9A0; letter-spacing:-1px; line-height:1;}
+  .ex-name{font-size:12px; color:#C3C7CF; font-weight:600; margin-top:6px; line-height:1.3;}
+  .ex-when{font-size:11px; color:#858B97; margin-top:3px;}
+  .ex-when b{color:#E4E6EB; font-weight:700;}
+  .ex-count{display:grid; grid-template-columns:repeat(4,1fr); gap:6px;}
+  .ex-count div{background:rgba(255,255,255,0.045); border:1px solid rgba(255,255,255,0.08); border-radius:11px; padding:9px 0 7px; text-align:center; overflow:hidden;}
+  .ex-count b{display:block; font-family:'Space Mono',monospace; font-size:23px; font-weight:700; color:#EEF0F3; line-height:1; font-variant-numeric:tabular-nums;}
+  .ex-count b.tick{animation:ex-tick .35s var(--ease);}
+  @keyframes ex-tick{from{transform:translateY(-6px); opacity:.25;}}
+  .ex-count span{display:block; font-size:9px; color:#7A8190; margin-top:5px; font-weight:600;}
+  .ex-foot{display:flex; justify-content:space-between; align-items:center; margin-top:11px; font-size:10px; color:#858B97; font-weight:600;}
+  .ex-dots{display:flex; gap:4px;}
+  .ex-dots i{width:16px; height:4px; border-radius:2px; background:rgba(255,255,255,0.12);}
+  .ex-dots i.done{background:#5FD68A;}
+  .ex-dots i.cur{background:var(--sc); box-shadow:0 0 6px var(--sc);}
+
+  .cal-card{padding:12px 12px 10px;}
+  .cal{display:grid; grid-template-columns:repeat(7,1fr); gap:4px;}
+  .cal .h{font-size:9px; color:var(--text-faint); text-align:center; font-weight:700; padding-bottom:2px;}
+  .cal .c{position:relative; height:48px; border-radius:10px; background:var(--panel-soft); border:1px solid var(--line); display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:3px; min-width:0; padding:0;}
+  .cal .c .dn{font-family:'Space Mono',monospace; font-size:12.5px; font-weight:700; color:var(--text-dim); line-height:1;}
+  .cal .c .lb{font-size:7.5px; font-weight:800; letter-spacing:-.2px; line-height:1; white-space:nowrap;}
+  .cal .c.out{opacity:.35;}
+  .cal .c.study{background:color-mix(in srgb, var(--amber) 9%, var(--panel-soft)); border-color:color-mix(in srgb, var(--amber) 22%, transparent);}
+  .cal .c.last{border:1.5px dashed var(--amber);}
+  .cal .c.last .lb{color:var(--amber);}
+  .cal .c.exam{background:var(--sc); border-color:transparent; box-shadow:inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -2px 0 rgba(0,0,0,0.13); transition:transform .12s;}
+  .cal .c.exam:active{transform:scale(.93);}
+  .cal .c.exam .dn, .cal .c.exam .lb{color:#0D0F13;}
+  .cal .c.past{opacity:.4;}
+  .cal .c.today{box-shadow:0 0 0 2px var(--panel), 0 0 0 4px var(--amber);}
+  .cal .c.today::after{content:'Today'; position:absolute; top:-7px; left:50%; transform:translateX(-50%); font-size:7px; font-weight:800; color:var(--amber-ink);
+    background:var(--amber); border-radius:4px; padding:1px 4px; line-height:1.2;}
+  .cal-key{display:flex; flex-wrap:wrap; gap:4px 12px; margin-top:10px; font-size:9.5px; color:var(--text-dim); font-weight:600;}
+  .cal-key span{display:inline-flex; align-items:center; gap:5px;}
+  .cal-key i{width:10px; height:10px; border-radius:3px; display:inline-block;}
+
+  .ex-list{border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; background:var(--panel); margin-bottom:18px;}
+  .ex-row{position:relative; display:flex; align-items:center; gap:11px; width:100%; text-align:left; padding:11px 12px 11px 15px;
+    border-bottom:1px solid var(--line); background:color-mix(in srgb, var(--sc) 12%, var(--panel)); transition:filter .15s;}
+  .ex-row:last-child{border-bottom:none;}
+  .ex-row:active{filter:brightness(1.08);}
+  .ex-row::before{content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--sc);}
+  .ex-row.next{box-shadow:inset 0 0 0 1.5px var(--amber);}
+  .ex-row.done{opacity:.5;}
+  .ex-date{width:44px; flex-shrink:0; text-align:center; background:var(--panel); border:1px solid var(--line); border-radius:11px; padding:5px 0 6px; line-height:1;}
+  .ex-date small{display:block; font-size:8.5px; font-weight:700; color:var(--text-dim);}
+  .ex-date b{display:block; font-family:'Space Mono',monospace; font-size:19px; font-weight:700; margin-top:3px;}
+  .ex-date span{display:block; font-size:8.5px; font-weight:700; color:var(--amber); margin-top:3px;}
+  .ex-info{flex:1; min-width:0;}
+  .ex-info .t{display:flex; align-items:center; gap:6px;}
+  .ex-info .code{font-family:'Manrope',sans-serif; font-weight:800; font-size:14.5px;}
+  .ex-info .n{font-size:11.5px; margin-top:3px; opacity:.92; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .ex-info .tags{display:flex; flex-wrap:wrap; gap:4px; margin-top:6px;}
+  .xt{font-size:9px; font-weight:700; padding:2px 6px; border-radius:6px; background:rgba(0,0,0,0.18); color:var(--text-dim); white-space:nowrap;}
+  [data-theme="light"] .xt{background:rgba(0,0,0,0.05);}
+  .xt.warn{color:var(--amber); background:var(--amber-soft);}
+  .xt.good{color:var(--live); background:color-mix(in srgb, var(--live) 14%, transparent);}
+  .ex-status{flex-shrink:0; min-width:40px; text-align:center; font-family:'Space Mono',monospace; font-size:9px; font-weight:700; color:var(--text-dim); line-height:1;}
+  .ex-status b{display:block; font-size:18px; color:var(--text); margin-bottom:3px;}
+  .ex-status.hot b{color:var(--amber);}
+  .ex-status.pill{border-radius:7px; padding:5px 7px; font-size:9.5px;}
+  .ex-status.done{background:var(--panel-raised);}
+  .ex-status.live{background:var(--live); color:#0B0D12;}
+  .ex-status.today{background:var(--amber); color:var(--amber-ink);}
+
+  .ins-row{display:flex; gap:11px; padding:10px 0; border-top:1px solid var(--line); font-size:12px; line-height:1.4;}
+  .ins-row:first-child{border-top:none; padding-top:1px;}
+  .ins-row:last-child{padding-bottom:0;}
+  .ins-ic{width:28px; height:28px; border-radius:9px; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:var(--panel-raised); color:var(--amber);}
+  .ins-ic svg.i{width:15px; height:15px;}
+  .ins-row b{display:block; font-weight:700;}
+  .ins-row span{display:block; color:var(--text-dim); font-size:11px; margin-top:1px;}
+  .notes .ins-ic{color:var(--text-dim);}
+
+  /* ============ EXAM BITS ELSEWHERE ============ */
+  .cr-exam{display:inline-flex; align-items:center; gap:5px; margin-top:7px; font-size:10px; font-weight:700; color:var(--amber);
+    background:var(--amber-soft); border-radius:6px; padding:3px 7px;}
+  .cr-exam svg.i{width:12px; height:12px;}
+  .cr-exam em{font-style:normal; font-family:'Space Mono',monospace; font-size:9.5px; color:var(--text-dim); margin-left:3px;}
+  .sh-exam{display:flex; align-items:center; gap:10px; margin-top:6px; padding:10px 12px; border-radius:12px;
+    border:1px solid color-mix(in srgb, var(--amber) 45%, transparent); background:var(--amber-soft);}
+  .sh-exam > div{flex:1; min-width:0;}
+  .sh-exam > div > span{display:block; font-size:9.5px; color:var(--amber); font-weight:700;}
+  .sh-exam > div > b{display:block; font-size:12.5px; font-weight:700; margin-top:3px;}
+  .sh-exam > div > em{display:block; font-style:normal; font-size:10px; color:var(--text-dim); margin-top:2px;}
+  .sh-exam-n{font-family:'Space Mono',monospace; font-size:11px; font-weight:700; color:var(--amber); flex-shrink:0; text-align:right;}
+  .tl-item.exam .tl-node{border-color:var(--sc);}
+  .tl-item.exam.next .tl-node{background:var(--sc); border-color:var(--sc);}
+  .tl-tag{display:inline-block; vertical-align:2px; font-size:8.5px; font-weight:800; color:#0D0F13; background:var(--sc); border-radius:5px; padding:2px 5px; margin-right:5px; letter-spacing:.2px;}
+  .sem-tick.exam{border-color:var(--sc); width:8px; height:8px; margin:-4px 0 0 -4px;}
+  .sem-tick.exam.done{background:var(--sc);}
+
   /* ============ BOTTOM NAV ============ */
   nav.bottomnav{position:fixed; left:0; right:0; bottom:0; z-index:40; background:color-mix(in srgb, var(--panel) 88%, transparent);
     -webkit-backdrop-filter:saturate(1.4) blur(16px); backdrop-filter:saturate(1.4) blur(16px);
@@ -417,7 +545,10 @@
       <div class="ticker-tape"><div class="ticker-track" id="tickerTrack"></div></div>
     </div>
 
-    <button class="milestone-chip" id="milestoneChip" onclick="switchTab('timeline')"></button>
+    <div class="strip2" id="strip2">
+      <button class="milestone-chip" id="milestoneChip" onclick="switchTab('timeline')"></button>
+      <button class="milestone-chip exam-chip" id="examChip" onclick="switchTab('exams')"></button>
+    </div>
 
     <div class="viewtoggle">
       <button class="now-btn" onclick="jumpToNow()"><span class="live-dot pulsing"></span>Jump to now</button>
@@ -455,6 +586,26 @@
     <div id="courseListWrap"></div>
   </div>
 
+  <!-- ===== EXAMS TAB ===== -->
+  <div id="view-exams" class="view" style="display:none;">
+    <div class="ex-hero" id="examHero"></div>
+    <div class="section-title">Exam calendar <span class="n" id="calRange"></span></div>
+    <div class="card cal-card">
+      <div class="cal" id="examCal"></div>
+      <div class="cal-key">
+        <span><i style="background:var(--c-iapm1)"></i>Exam day</span>
+        <span><i style="background:color-mix(in srgb, var(--amber) 22%, var(--panel-soft)); border:1px solid color-mix(in srgb, var(--amber) 35%, transparent)"></i>Study day</span>
+        <span><i style="border:1.5px dashed var(--amber)"></i>Last class</span>
+      </div>
+    </div>
+    <div class="section-title">Schedule <span class="n" id="examCount"></span></div>
+    <div class="ex-list" id="examList"></div>
+    <div class="section-title">At a glance</div>
+    <div class="card" id="examInsights"></div>
+    <div class="section-title">Notes</div>
+    <div class="card notes" id="examNotes"></div>
+  </div>
+
   <!-- ===== TIMELINE TAB ===== -->
   <div id="view-timeline" class="view" style="display:none;">
     <div class="card" id="semCard"></div>
@@ -469,6 +620,9 @@
   </button>
   <button class="nav-btn" id="nav-courses" onclick="switchTab('courses')">
     <span class="ni"><svg class="i" viewBox="0 0 24 24"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5z"/><path d="M13 4h5.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H13z"/><path d="M7 8h1.5M16 8h1.5"/></svg></span><span class="nl">Courses</span>
+  </button>
+  <button class="nav-btn" id="nav-exams" onclick="switchTab('exams')">
+    <span class="ni"><svg class="i" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9.5 4V2.8h5V4M8.5 10h7M8.5 13.5h7M8.5 17h4"/></svg><span class="nbadge" id="examBadge" style="display:none"></span></span><span class="nl">Exams</span>
   </button>
   <button class="nav-btn" id="nav-timeline" onclick="switchTab('timeline')">
     <span class="ni"><svg class="i" viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 4.5h11.5l-2 4 2 4H5"/></svg></span><span class="nl">Timeline</span>
@@ -532,7 +686,7 @@ const KEYDATES = [
   {date:"2026-10-15", label:"Project Interim Review", sem:"III"},
   {date:"2026-11-13", label:"Project Viva Voce", sem:"III"},
   {date:"2026-11-20", label:"Last Working Day", sem:"III"},
-  {date:"2026-11-23", label:"Semester Exams", sem:"III"},
+  {date:"2026-11-23", label:"Semester Exams", sem:"III", examWindow:true},  // shown paper-by-paper from EXAMS
   {date:"2026-12-09", label:"Classes Start Date", sem:"IV"},
   {date:"2027-02-27", label:"Completion of Project", sem:"IV"},
   {date:"2027-03-25", label:"Last Working Day", sem:"IV"},
@@ -540,7 +694,23 @@ const KEYDATES = [
   {date:"2027-05-15", label:"Graduation Day", sem:"IV"},
 ];
 const TERM_START = new Date("2026-07-20T00:00:00");
-const TERM_END   = new Date("2026-11-23T23:59:59");
+const TERM_END   = new Date("2026-12-04T23:59:59");   // last exam paper
+
+/* Semester exams, Sep–Nov 2026 session (from the exam portal timetable).
+   Codes are the COURSES keys; official course codes live on COURSES. */
+const EXAM_SLOTS = {
+  FN: {label:"Forenoon",  start:"08:55", end:"12:05"},
+  AN: {label:"Afternoon", start:"13:55", end:"17:05"},
+};
+const EXAMS = [
+  {code:"IAPM1", date:"2026-11-23", slot:"AN"},   // 24GA03
+  {code:"PM1",   date:"2026-11-24", slot:"AN"},   // 24GD03
+  {code:"FD1",   date:"2026-12-01", slot:"AN"},   // 24GA04
+  {code:"SM-A",  date:"2026-12-03", slot:"AN"},   // 24GM32
+  {code:"MFS1",  date:"2026-12-04", slot:"AN"},   // 24VA04
+];
+// Last working day — no weekly classes run after this.
+const LAST_CLASS_DAY = new Date("2026-11-20T23:59:59");
 
 const MONTHS_SHORT = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const DAY_ABBR = {Monday:"Mon",Tuesday:"Tue",Wednesday:"Wed",Thursday:"Thu",Friday:"Fri",Saturday:"Sat"};
@@ -556,6 +726,7 @@ function toMin(t){ const [h,m]=t.split(':').map(Number); return h*60+m; }
 function currentMinutes(){ const n=new Date(); return n.getHours()*60+n.getMinutes(); }
 function nowSeconds(){ const n=new Date(); return n.getHours()*3600+n.getMinutes()*60+n.getSeconds(); }
 function todayName(){
+  if(new Date() > LAST_CLASS_DAY) return null;
   const n = REAL_DAY_NAMES[new Date().getDay()];
   return SCHEDULE[n] ? n : null;
 }
@@ -580,6 +751,24 @@ function fmtDur(sec){
   return `${m}:${String(s).padStart(2,'0')}`;
 }
 function joinMeta(...parts){ return parts.filter(x => x && x !== '—').join(' · '); }
+function fmtDay(d){ return `${REAL_DAY_NAMES[d.getDay()].slice(0,3)} ${d.getDate()} ${MONTHS_SHORT[d.getMonth()]}`; }
+function daysUntil(d){ return Math.round((new Date(d.toDateString()) - today0()) / DAY_MS); }
+function whenText(days){ return days===0 ? 'Today' : days===1 ? 'Tomorrow' : days<0 ? `${-days} days ago` : `in ${days} days`; }
+
+/* ---- exam helpers ---- */
+function examStart(e){ return new Date(`${e.date}T${EXAM_SLOTS[e.slot].start}:00`); }
+function examEnd(e){ return new Date(`${e.date}T${EXAM_SLOTS[e.slot].end}:00`); }
+function examDay(e){ return new Date(e.date+"T00:00:00"); }
+function examFor(code){ return EXAMS.find(e => e.code === code) || null; }
+function examSlotText(e){ const s = EXAM_SLOTS[e.slot]; return `${fmtTime(s.start)}–${fmtTime(s.end)}`; }
+function liveExam(){ const n = new Date(); return EXAMS.find(e => examStart(e) <= n && n < examEnd(e)) || null; }
+function nextExam(){ const n = new Date(); return EXAMS.find(e => examStart(e) > n) || null; }
+function classesOver(){ return new Date() > LAST_CLASS_DAY; }
+// Free days before each paper — counted from the previous paper, or from the last class for the first one.
+function prepDays(i){
+  const prev = i === 0 ? new Date(LAST_CLASS_DAY.toDateString()) : examDay(EXAMS[i-1]);
+  return Math.round((examDay(EXAMS[i]) - prev) / DAY_MS) - 1;
+}
 function semesterWeek(){
   const t = today0();
   const total = Math.floor((TERM_END - TERM_START) / (7*DAY_MS)) + 1;
@@ -631,7 +820,10 @@ function refreshAll(){
   renderNowNext();
   renderTicker();
   renderMilestoneChip();
+  renderExamBadge();
   if(document.getElementById('view-timeline').style.display !== 'none'){ renderTimeline(); }
+  if(examsVisible()) renderExams();
+  if(document.getElementById('view-courses').style.display !== 'none'){ renderCourses(); }
 }
 
 function secondTick(){
@@ -640,6 +832,11 @@ function secondTick(){
   renderNowNext();
   positionGridNeedle();
   tickDayRow();
+  if(examsVisible()){
+    const lx = liveExam(), ne = lx || nextExam();
+    const k = (lx ? 'L'+lx.code : '') + '|' + (ne ? ne.code : '');
+    if(k !== exKey) renderExams(); else tickExamCountdown();
+  }
 }
 
 function init(){
@@ -656,6 +853,7 @@ function init(){
   renderNowNext();
   renderTicker();
   renderMilestoneChip();
+  renderExamBadge();
   renderTimeline();
   scrollToCurrentRow();
   requestAnimationFrame(positionGridNeedle);
@@ -907,6 +1105,7 @@ function findNextClassAcrossWeek(fromMin, onlyCode){
   for(let offset=0; offset<8; offset++){
     const d = new Date(now);
     d.setDate(d.getDate()+offset);
+    if(d > LAST_CLASS_DAY) break;
     const dn = REAL_DAY_NAMES[d.getDay()];
     const sched = SCHEDULE[dn];
     if(!sched) continue;
@@ -929,8 +1128,12 @@ function nowNextState(){
   const sched = tn ? SCHEDULE[tn] : null;
 
   let now;
-  if(!sched){
-    now = {kind:'off', reason:'noday'};
+  const lx = liveExam();
+  if(lx){
+    const s = EXAM_SLOTS[lx.slot];
+    now = {kind:'exam', code:lx.code, slot:lx.slot, startMin:toMin(s.start), endMin:toMin(s.end)};
+  } else if(!sched){
+    now = {kind:'off', reason: classesOver() ? (nextExam() ? 'exams' : 'semdone') : 'noday'};
   } else {
     const idx = PERIODS.findIndex(p => nowMin >= toMin(p.start) && nowMin < toMin(p.end));
     if(idx < 0){
@@ -953,9 +1156,13 @@ function nowNextState(){
     target.setDate(target.getDate() + nx.offsetDays);
     target.setHours(Math.floor(b.startMin/60), b.startMin%60, 0, 0);
     next = {...nx, startMin:b.startMin, endMin:b.endMin, secsUntil:Math.max(0, Math.round((target - d)/1000))};
+  } else {
+    // Classes are over for the semester: the board counts down to the next paper instead.
+    const ne = nextExam();
+    if(ne) next = {exam:true, code:ne.code, e:ne, secsUntil:Math.max(0, Math.round((examStart(ne) - d)/1000))};
   }
 
-  const key = [tn, now.kind, now.reason, now.startMin, nx && nx.dayName, nx && nx.idx, nx && nx.offsetDays].join('|');
+  const key = [tn, now.kind, now.reason, now.startMin, now.code, nx && nx.dayName, nx && nx.idx, nx && nx.offsetDays, next && next.exam && next.code, next && next.exam && daysUntil(examDay(next.e))].join('|');
   return {now, next, nowSec, key};
 }
 
@@ -973,6 +1180,17 @@ function nowColHTML(st){
         <div class="tk-main">${n.code}</div>
         <div class="tk-name">${c.name}</div>
         <div class="tk-meta">${joinMeta(c.room, c.faculty) || '&nbsp;'}</div>
+      </button>${prog}
+    </div>`;
+  }
+  if(n.kind === 'exam'){
+    const c = COURSES[n.code];
+    return `<div class="tk-col tk-now glow" style="--sc:${c.color}">
+      <div class="tk-label"><span class="live-dot pulsing amber"></span>Exam on<span class="tk-chip" data-nn="nowChip"></span></div>
+      <button class="tk-body" onclick="switchTab('exams')">
+        <div class="tk-main">${n.code}</div>
+        <div class="tk-name">${c.name}</div>
+        <div class="tk-meta">${EXAM_SLOTS[n.slot].label} paper · ${c.code}</div>
       </button>${prog}
     </div>`;
   }
@@ -997,11 +1215,14 @@ function nowColHTML(st){
   const realDay = REAL_DAY_NAMES[new Date().getDay()];
   const line = n.reason === 'before' ? `Classes start ${fmtMin(toMin(PERIODS[0].start))}`
              : n.reason === 'after'  ? 'Done for today'
+             : n.reason === 'exams'  ? `Classes ended ${fmtDay(new Date(LAST_CLASS_DAY.toDateString()))}`
+             : n.reason === 'semdone' ? 'All exam papers written'
              : `${realDay} · no classes`;
+  const main = n.reason === 'exams' ? 'Study time' : n.reason === 'semdone' ? 'Semester done' : 'No class now';
   return `<div class="tk-col tk-now">
       <div class="tk-label"><span class="live-dot idle"></span>Now</div>
       <div class="tk-body">
-        <div class="tk-main dim">No class now</div>
+        <div class="tk-main ${n.reason==='exams'||n.reason==='semdone'?'soft':'dim'}">${main}</div>
         <div class="tk-name">${line}</div>
       </div>
     </div>`;
@@ -1009,6 +1230,16 @@ function nowColHTML(st){
 
 function nextColHTML(st){
   const x = st.next;
+  if(!x && classesOver()){
+    const s4 = KEYDATES.find(k => k.sem==='IV' && new Date(k.date+"T00:00:00") >= today0());
+    if(s4){
+      const d4 = new Date(s4.date+"T00:00:00");
+      return `<div class="tk-col tk-next">
+      <div class="tk-label"><span class="tk-arrow">▸</span>Up next<span class="tk-chip">${whenText(daysUntil(d4))}</span></div>
+      <div class="tk-body"><div class="tk-main soft">Semester IV</div><div class="tk-name">${s4.label} · ${fmtDay(d4)}</div></div>
+    </div>`;
+    }
+  }
   if(!x){
     return `<div class="tk-col tk-next">
       <div class="tk-label">Next class</div>
@@ -1016,6 +1247,19 @@ function nextColHTML(st){
     </div>`;
   }
   const c = COURSES[x.code];
+  if(x.exam){
+    const dd = daysUntil(examDay(x.e));
+    const dl = dd === 0 ? 'Today' : dd === 1 ? 'Tomorrow' : fmtDay(examDay(x.e));
+    return `<div class="tk-col tk-next glow" style="--sc:${c.color}">
+      <div class="tk-label"><span class="tk-arrow">▸</span>Next exam<span class="tk-chip" data-nn="nextChip"></span></div>
+      <button class="tk-body" onclick="switchTab('exams')">
+        <div class="tk-main">${x.code}</div>
+        <div class="tk-name">${c.name}</div>
+        <div class="tk-meta"><b>${dl}</b> ${examSlotText(x.e)}</div>
+        <div class="tk-meta">${EXAM_SLOTS[x.e.slot].label} session · ${c.code}</div>
+      </button>
+    </div>`;
+  }
   const dayLabel = x.offsetDays === 0 ? 'Today' : x.offsetDays === 1 ? 'Tomorrow' : x.dayName.slice(0,3);
   return `<div class="tk-col tk-next glow" style="--sc:${c.color}">
       <div class="tk-label"><span class="tk-arrow">▸</span>Next class<span class="tk-chip" data-nn="nextChip"></span></div>
@@ -1043,7 +1287,7 @@ function tickNowNext(el, st){
     const chip = el.querySelector('[data-nn="nextChip"]');
     if(chip) chip.textContent = 'in ' + fmtDur(st.next.secsUntil);
     const col = el.querySelector('.tk-next');
-    if(col) col.classList.toggle('soon', st.next.secsUntil <= 15*60);
+    if(col) col.classList.toggle('soon', st.next.secsUntil <= (st.next.exam ? 3600 : 15*60));
   }
 }
 
@@ -1059,7 +1303,7 @@ function renderNowNext(){
     // Let the bar paint at 0 first so it visibly fills in on a fresh state.
     requestAnimationFrame(() => requestAnimationFrame(() => tickNowNext(el, st)));
     // A class just started or ended: refresh the rest of the live UI too.
-    if(changed){ renderGrid(); renderPeriodList(); renderTicker(); }
+    if(changed){ renderGrid(); renderPeriodList(); renderTicker(); renderMilestoneChip(); renderExamBadge(); }
   } else {
     tickNowNext(el, st);
   }
@@ -1071,8 +1315,19 @@ function renderTicker(){
   const tn = todayName();
   const nowMin = currentMinutes();
   let items;
-  if(!tn){
+  const ne = nextExam();
+  if(classesOver()){
+    // Exam period: the tape becomes the exam lineup.
+    const now = new Date(); let tagged = false;
+    items = EXAMS.map(e=>{
+      const st = examEnd(e) <= now ? 'done' : examStart(e) <= now ? 'live' : 'up';
+      let label = st==='done' ? 'DONE' : st==='live' ? 'LIVE' : '';
+      if(st==='up' && !tagged){ label = daysUntil(examDay(e))===0 ? 'TODAY' : 'NEXT'; tagged = true; }
+      return `<span class="tt-item ${st}"><b>${e.code}</b>${fmtDay(examDay(e))}<i>${fmtTime(EXAM_SLOTS[e.slot].start)}</i>${label?`<span class="st">${label}</span>`:''}</span>`;
+    });
+  } else if(!tn){
     items = [`<span class="tt-item">No classes today</span>`, `<span class="tt-item">Week resumes Monday</span>`];
+    if(ne) items.push(`<span class="tt-item up"><b>${ne.code}</b>First exam ${fmtDay(examDay(ne))}<span class="st">${daysUntil(examDay(ne))}D</span></span>`);
   } else {
     let nextTagged = false;
     items = dayBlocks(tn).map(b=>{
@@ -1100,18 +1355,30 @@ function renderTicker(){
 /* ================= MILESTONE STRIP ================= */
 function nextMilestone(){
   const t = today0();
-  const upcoming = KEYDATES.map(k=>({...k, d:new Date(k.date+"T00:00:00")})).filter(k=>k.d>=t).sort((a,b)=>a.d-b.d);
+  const upcoming = KEYDATES.filter(k=>!k.examWindow).map(k=>({...k, d:new Date(k.date+"T00:00:00")})).filter(k=>k.d>=t).sort((a,b)=>a.d-b.d);
   return upcoming[0] || null;
 }
 function renderMilestoneChip(){
-  const el = document.getElementById('milestoneChip');
+  const el = document.getElementById('milestoneChip'), ex = document.getElementById('examChip'), strip = document.getElementById('strip2');
   const m = nextMilestone();
-  if(!m){ el.style.display='none'; return; }
-  const diffDays = Math.round((m.d - today0()) / DAY_MS);
-  const countTxt = diffDays===0 ? "Today" : diffDays===1 ? "Tomorrow" : diffDays+" days";
-  el.innerHTML = `<div class="mc-date"><span class="m">${MONTHS_SHORT[m.d.getMonth()]}</span><span class="dd">${m.d.getDate()}</span></div>
-    <div class="mc-body"><div class="k">Next key date · Sem ${m.sem}</div><div class="l">${m.label}</div></div>
-    <span class="mc-count ${diffDays<=14?'hot':''}">${countTxt}</span>`;
+  const lx = liveExam(), ne = lx || nextExam();
+  const countTxt = d => d===0 ? 'Today' : d===1 ? 'Tomorrow' : d+' days';
+  el.style.display = m ? '' : 'none';
+  if(m){
+    const dd = daysUntil(m.d);
+    el.innerHTML = `<div class="mc-date"><span class="m">${MONTHS_SHORT[m.d.getMonth()]}</span><span class="dd">${m.d.getDate()}</span></div>
+      <div class="mc-body"><div class="k">Key date · <b class="${dd<=14?'hot':''}">${countTxt(dd)}</b></div><div class="l">${m.label}</div></div>`;
+  }
+  ex.style.display = ne ? '' : 'none';
+  if(ne){
+    const c = COURSES[ne.code], day = examDay(ne), dd = daysUntil(day);
+    ex.style.setProperty('--sc', c.color);
+    ex.classList.toggle('live', !!lx);
+    ex.innerHTML = `<div class="mc-date"><span class="m">${MONTHS_SHORT[day.getMonth()]}</span><span class="dd">${day.getDate()}</span></div>
+      <div class="mc-body"><div class="k">${lx ? 'Exam · <b class="hot">On now</b>' : `Next exam · <b class="${dd<=14?'hot':''}">${countTxt(dd)}</b>`}</div><div class="l">${ne.code}<span>${c.name}</span></div></div>`;
+  }
+  strip.style.display = (m || ne) ? '' : 'none';
+  strip.classList.toggle('single', !(m && ne));
 }
 
 /* ================= BOTTOM SHEET ================= */
@@ -1134,6 +1401,16 @@ function openSheet(code){
       <div class="sh-tile"><span>Per week</span><b>${periods ? periods+' period'+(periods===1?'':'s') : 'Not on grid'}</b></div>
     </div>` : `<div class="sh-note">Extracurricular activity. The timetable doesn't list a faculty member or room for this session.</div>`;
 
+  const ex = examFor(code);
+  let examHTML = '';
+  if(ex){
+    const done = examEnd(ex) <= new Date(), live = liveExam() === ex;
+    examHTML = `<div class="sh-exam"><div><span>Semester exam</span><b>${fmtDay(examDay(ex))} · ${examSlotText(ex)}</b><em>${EXAM_SLOTS[ex.slot].label} session</em></div>
+      <span class="sh-exam-n">${live ? 'On now' : done ? 'Written' : whenText(daysUntil(examDay(ex)))}</span></div>`;
+  } else if(c.code){
+    examHTML = `<div class="sh-note" style="margin-top:6px">No paper for this course on the semester exam timetable.</div>`;
+  }
+
   const sessHTML = blocks.length ? blocks.map(b=>{
     const isNext = nx && nx.dayName===b.day && nxBlockStart===b.s;
     return `<div class="sh-sess ${isNext?'is-next':''}">
@@ -1150,6 +1427,7 @@ function openSheet(code){
     </div>
     <div class="sh-name">${c.name}</div>
     ${tiles}
+    ${examHTML}
     <div class="sh-sub"><span>This week</span><span>${blocks.length} session${blocks.length===1?'':'s'}</span></div>
     ${sessHTML}`;
   document.getElementById('sheetOverlay').classList.add('open');
@@ -1163,15 +1441,20 @@ function renderTimeline(){
   let pct = ((now - TERM_START) / (TERM_END - TERM_START)) * 100;
   pct = Math.max(0, Math.min(100, pct));
   const w = semesterWeek();
-  const daysToExams = Math.ceil((new Date("2026-11-23T00:00:00") - t0) / DAY_MS);
+  const daysToExams = daysUntil(examDay(EXAMS[0]));
+  const written = EXAMS.filter(e => examEnd(e) <= now).length;
   const status = now < TERM_START ? "Semester hasn't started yet"
                : now > TERM_END ? "Semester III has concluded"
-               : `Week ${w.n} of ${w.total} · ${daysToExams>0 ? daysToExams+' days to exams' : 'Exams underway'}`;
+               : daysToExams > 0 ? `Week ${w.n} of ${w.total} · ${daysToExams} days to first exam`
+               : `Exams underway · ${written} of ${EXAMS.length} papers written`;
   const span = TERM_END - TERM_START;
-  const ticks = KEYDATES.filter(k=>k.sem==='III').map(k=>{
+  const ticks = KEYDATES.filter(k=>k.sem==='III' && !k.examWindow).map(k=>{
     const d = new Date(k.date+"T00:00:00");
     const left = Math.max(0, Math.min(100, (d - TERM_START)/span*100));
     return `<span class="sem-tick ${d<=t0?'done':''}" style="left:${left}%" title="${k.label}"></span>`;
+  }).join('') + EXAMS.map(e=>{
+    const left = Math.max(0, Math.min(100, (examDay(e) - TERM_START)/span*100));
+    return `<span class="sem-tick exam ${examEnd(e)<=now?'done':''}" style="left:${left}%; --sc:${COURSES[e.code].color}" title="${e.code} exam"></span>`;
   }).join('');
   document.getElementById('semCard').innerHTML = `
     <div class="sem-top">
@@ -1179,13 +1462,20 @@ function renderTimeline(){
       <div class="pct">${Math.round(pct)}%</div>
     </div>
     <div class="sem-bar"><div class="sem-fill" id="semFill"></div>${ticks}</div>
-    <div class="sem-ends"><span>20 Jul</span><span>23 Nov</span></div>`;
+    <div class="sem-ends"><span>20 Jul</span><span>Exams end ${fmtDay(examDay(EXAMS[EXAMS.length-1]))}</span></div>`;
   requestAnimationFrame(()=>requestAnimationFrame(()=>{ const f=document.getElementById('semFill'); if(f) f.style.width = pct+'%'; }));
 
-  const nextM = nextMilestone();
+  // Key dates + individual exam papers, merged in date order.
+  const itemsFor = sem => {
+    let list = KEYDATES.filter(k=>k.sem===sem && !k.examWindow).map(k=>({...k}));
+    if(sem==='III') list = list.concat(EXAMS.map(e=>({date:e.date, label:COURSES[e.code].name, sem, exam:e})));
+    return list.sort((a,b)=> a.date.localeCompare(b.date));
+  };
+  const allItems = itemsFor('III').concat(itemsFor('IV'));
+  const nextM = allItems.find(k => k.exam ? examEnd(k.exam) > now : new Date(k.date+"T00:00:00") >= t0) || null;
   let html = '';
   ['III','IV'].forEach(sem=>{
-    const list = KEYDATES.filter(k=>k.sem===sem);
+    const list = itemsFor(sem);
     html += `<div class="tl-group">Semester ${sem} <span class="n">${list.length}</span></div><div class="tl">`;
     let todayPlaced = false;
     list.forEach(k=>{
@@ -1198,12 +1488,15 @@ function renderTimeline(){
         }
       }
       const isNext = nextM && nextM.date === k.date && nextM.label === k.label;
-      const cls = diff < 0 ? 'done' : isNext ? 'next' : diff <= 14 ? 'soon' : 'up';
-      const when = diff === 0 ? 'Today' : diff < 0 ? `${-diff} days ago` : diff === 1 ? 'Tomorrow' : `in ${diff} days`;
-      html += `<div class="tl-item ${cls}">
+      const isDone = k.exam ? examEnd(k.exam) <= now : diff < 0;
+      const cls = isDone ? 'done' : isNext ? 'next' : diff <= 14 ? 'soon' : 'up';
+      const when = isDone && k.exam ? 'Written' : whenText(diff);
+      const label = k.exam ? `<span class="tl-tag">${k.exam.code} exam</span>${k.label}` : k.label;
+      const sub = k.exam ? ` · ${examSlotText(k.exam)}` : '';
+      html += `<div class="tl-item ${cls} ${k.exam?'exam':''}" ${k.exam?`style="--sc:${COURSES[k.exam.code].color}"`:''}>
         <span class="tl-node"></span>
         <div class="tl-date"><b>${d.getDate()}</b><span>${MONTHS_SHORT[d.getMonth()]} ${d.getFullYear()}</span></div>
-        <div class="tl-body"><div class="tl-label">${k.label}</div><div class="tl-when">${when}</div></div>
+        <div class="tl-body"><div class="tl-label">${label}</div><div class="tl-when">${when}${sub}</div></div>
       </div>`;
     });
     html += `</div>`;
@@ -1222,6 +1515,13 @@ function sessionChips(code){
   DAYS.forEach(d => dayBlocks(d, code).forEach(b => out.push(`${DAY_ABBR[d]} ${fmtMin(b.startMin)}–${fmtMin(b.endMin)}`)));
   return out;
 }
+function examTagHTML(code){
+  const ex = examFor(code);
+  if(!ex) return '';
+  const done = examEnd(ex) <= new Date();
+  const dd = daysUntil(examDay(ex));
+  return `<div><span class="cr-exam"><svg class="i" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M8.5 10h7M8.5 14h5"/></svg>Exam ${fmtDay(examDay(ex))} · ${EXAM_SLOTS[ex.slot].label}<em>${done ? 'done' : dd===0 ? 'today' : dd+'d'}</em></span></div>`;
+}
 function courseRowHTML(code, opts){
   opts = opts || {};
   const c = COURSES[code];
@@ -1237,6 +1537,7 @@ function courseRowHTML(code, opts){
       </div>
       <div class="cr-name">${c.name}</div>
       <div class="cr-meta">${c.faculty || 'No faculty listed'} · ${c.room && c.room!=='—' ? c.room : 'No room listed'}</div>
+      ${examTagHTML(code)}
       ${sess===0 ? `<span class="cr-flag">Not on the weekly grid</span>` : ''}
       ${chips.length ? `<div class="cr-sessions">${chips.map(s=>`<span>${s}</span>`).join('')}</div>` : ''}
     </div>
@@ -1280,15 +1581,162 @@ function clearSearch(){
   input.value = ''; renderCourses(); input.focus();
 }
 
+
+/* ================= EXAMS TAB ================= */
+const ICONS = {
+  cal:'<svg class="i" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
+  clock:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
+  bolt:'<svg class="i" viewBox="0 0 24 24"><path d="M13 3L5 13.5h6L10 21l8-10.5h-6z"/></svg>',
+  pause:'<svg class="i" viewBox="0 0 24 24"><path d="M5 8h11v6a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 9.5h1.5a2.5 2.5 0 0 1 0 5H16M8 3.5v2M11 3.5v2"/></svg>',
+  flag:'<svg class="i" viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 4.5h11.5l-2 4 2 4H5"/></svg>',
+  dash:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12h7"/></svg>',
+  check:'<svg class="i" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  info:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.8v.2"/></svg>',
+};
+
+function renderExamBadge(){
+  const b = document.getElementById('examBadge');
+  if(!b) return;
+  const lx = liveExam(), ne = nextExam();
+  if(lx){ b.textContent = 'LIVE'; b.className = 'nbadge live'; b.style.display = ''; return; }
+  if(!ne){ b.style.display = 'none'; return; }
+  const dd = daysUntil(examDay(ne));
+  b.textContent = dd === 0 ? 'TODAY' : dd + 'd';
+  b.className = 'nbadge' + (dd <= 7 ? ' hot' : '');
+  b.style.display = '';
+}
+
+let exKey = null;
+function examsVisible(){ const v = document.getElementById('view-exams'); return v && v.style.display !== 'none'; }
+
+function renderExams(){
+  const now = new Date();
+  const lx = liveExam(), ne = lx || nextExam();
+  exKey = (lx ? 'L'+lx.code : '') + '|' + (ne ? ne.code : '');
+  const hero = document.getElementById('examHero');
+  if(ne){
+    const c = COURSES[ne.code], idx = EXAMS.indexOf(ne), dd = daysUntil(examDay(ne));
+    hero.style.setProperty('--sc', c.color);
+    hero.innerHTML = `
+      <div class="ex-top"><span class="live-dot pulsing ${lx ? '' : 'amber'}"></span>${lx ? 'Exam in progress' : dd === 0 ? 'Exam today' : 'Next exam'}<span class="slot">${EXAM_SLOTS[ne.slot].label} · ${examSlotText(ne)}</span></div>
+      <button class="ex-main" style="width:100%; text-align:left" onclick="openSheet('${ne.code}')">
+        <span class="ex-bar" style="--sc:${c.color}"></span>
+        <div style="min-width:0">
+          <div class="ex-code">${ne.code}</div>
+          <div class="ex-name">${c.name}</div>
+          <div class="ex-when"><b>${fmtDay(examDay(ne))}</b> · ${c.code} · ${c.faculty || ''}</div>
+        </div>
+      </button>
+      <div class="ex-count" id="exCount">
+        <div><b data-u="d">--</b><span>days</span></div><div><b data-u="h">--</b><span>hours</span></div>
+        <div><b data-u="m">--</b><span>min</span></div><div><b data-u="s">--</b><span>sec</span></div>
+      </div>
+      <div class="ex-foot"><span>${lx ? 'Time left in this paper' : `Paper ${idx+1} of ${EXAMS.length} · ${prepDays(idx)===0 ? 'back-to-back with '+EXAMS[idx-1].code : prepDays(idx)+' free day'+(prepDays(idx)===1?'':'s')+' before it'}`}</span>
+        <span class="ex-dots">${EXAMS.map((e,i)=>`<i class="${examEnd(e)<=now ? 'done' : i===idx ? 'cur' : ''}"></i>`).join('')}</span></div>`;
+  } else {
+    hero.style.setProperty('--sc', '#5FD68A');
+    const last = EXAMS[EXAMS.length-1];
+    hero.innerHTML = `
+      <div class="ex-top"><span class="live-dot"></span>Exams complete</div>
+      <div class="ex-main"><span class="ex-bar" style="--sc:#5FD68A"></span><div>
+        <div class="ex-code" style="font-size:22px">All ${EXAMS.length} papers written</div>
+        <div class="ex-name">Semester III exams finished on ${fmtDay(examDay(last))}.</div></div></div>
+      <div class="ex-foot"><span>Semester IV classes start ${fmtDay(new Date("2026-12-09T00:00:00"))}</span><span class="ex-dots">${EXAMS.map(()=>'<i class="done"></i>').join('')}</span></div>`;
+  }
+  tickExamCountdown();
+
+  // Calendar: Monday of the last-class week through Sunday of the last-exam week.
+  const lastClass = new Date(LAST_CLASS_DAY.toDateString());
+  const lastEx = examDay(EXAMS[EXAMS.length-1]);
+  const start = new Date(lastClass); start.setDate(start.getDate() - ((start.getDay()+6)%7));
+  const end = new Date(lastEx); end.setDate(end.getDate() + (6 - (end.getDay()+6)%7));
+  const t0 = today0();
+  let cal = ['M','T','W','T','F','S','S'].map(x=>`<div class="h">${x}</div>`).join('');
+  for(let d = new Date(start); d <= end; d.setDate(d.getDate()+1)){
+    const ex = EXAMS.find(e => examDay(e).getTime() === d.getTime());
+    const isLast = d.getTime() === lastClass.getTime();
+    const study = !ex && d > lastClass && d < lastEx;
+    const cls = ['c', ex?'exam':'', isLast?'last':'', study?'study':'', (d < lastClass || d > lastEx)?'out':'',
+                 d.getTime()===t0.getTime()?'today':'', d < t0 ? 'past':''].join(' ');
+    const lb = ex ? ex.code : isLast ? 'Last class' : '';
+    const inner = `<span class="dn">${d.getDate()}</span>${lb ? `<span class="lb">${lb}</span>` : ''}`;
+    cal += ex ? `<button class="${cls}" style="--sc:${COURSES[ex.code].color}" onclick="openSheet('${ex.code}')" aria-label="${ex.code} exam ${fmtDay(d)}">${inner}</button>`
+              : `<div class="${cls}">${inner}</div>`;
+  }
+  document.getElementById('examCal').innerHTML = cal;
+  document.getElementById('calRange').textContent = `${start.getDate()} ${MONTHS_SHORT[start.getMonth()]} – ${end.getDate()} ${MONTHS_SHORT[end.getMonth()]}`;
+
+  // Schedule
+  document.getElementById('examCount').textContent = `${EXAMS.length} papers`;
+  document.getElementById('examList').innerHTML = EXAMS.map((e,i)=>{
+    const c = COURSES[e.code], day = examDay(e), dd = daysUntil(day);
+    const done = examEnd(e) <= now, live = examStart(e) <= now && !done;
+    const p = prepDays(i);
+    const prepTag = i === 0 ? `<span class="xt">${p} days after last class</span>`
+                  : p === 0 ? `<span class="xt warn">Back-to-back</span>`
+                  : `<span class="xt ${p>=4?'good':''}">${p} free day${p===1?'':'s'} before</span>`;
+    const status = done ? `<span class="ex-status pill done">Done</span>`
+                 : live ? `<span class="ex-status pill live">Live</span>`
+                 : dd === 0 ? `<span class="ex-status pill today">Today</span>`
+                 : `<span class="ex-status ${dd<=7?'hot':''}"><b>${dd}</b>${dd===1?'day':'days'}</span>`;
+    return `<button class="ex-row ${done?'done':''} ${ne===e?'next':''}" style="--sc:${c.color}" onclick="openSheet('${e.code}')">
+      <div class="ex-date"><small>${REAL_DAY_NAMES[day.getDay()].slice(0,3)}</small><b>${day.getDate()}</b><span>${MONTHS_SHORT[day.getMonth()]}</span></div>
+      <div class="ex-info">
+        <div class="t"><span class="code">${e.code}</span><span class="cr-coursecode">${c.code}</span></div>
+        <div class="n">${c.name}</div>
+        <div class="tags"><span class="xt">${EXAM_SLOTS[e.slot].label} · ${examSlotText(e)}</span>${prepTag}</div>
+      </div>${status}
+    </button>`;
+  }).join('');
+
+  // At a glance — all derived from the data, so it stays right if dates change.
+  const first = EXAMS[0], last = EXAMS[EXAMS.length-1];
+  const spanDays = Math.round((examDay(last) - examDay(first)) / DAY_MS) + 1;
+  const sameSlot = EXAMS.every(e => e.slot === first.slot);
+  const pairs = []; let gap = {d:-1, i:0};
+  EXAMS.forEach((e,i)=>{ if(i===0) return; const p = prepDays(i); if(p===0) pairs.push(`${EXAMS[i-1].code} → ${e.code}`); if(p > gap.d) gap = {d:p, i}; });
+  const gs = new Date(examDay(EXAMS[gap.i-1])); gs.setDate(gs.getDate()+1);
+  const ge = new Date(examDay(EXAMS[gap.i])); ge.setDate(ge.getDate()-1);
+  const noExam = COURSE_ORDER.filter(code => !examFor(code));
+  const row = (ic, b, s) => `<div class="ins-row"><span class="ins-ic">${ICONS[ic]}</span><div><b>${b}</b><span>${s}</span></div></div>`;
+  document.getElementById('examInsights').innerHTML =
+    row('cal', `${EXAMS.length} papers in ${spanDays} days`, `${fmtDay(examDay(first))} to ${fmtDay(examDay(last))}`) +
+    (sameSlot ? row('clock', `Every paper is in the ${EXAM_SLOTS[first.slot].label.toLowerCase()} slot`, `${examSlotText(first)}, 3 hours 10 minutes`) : '') +
+    (pairs.length ? row('bolt', `${pairs.length} back-to-back pair${pairs.length===1?'':'s'}`, `${pairs.join(' and ')}. Start the second paper of each pair early.`) : '') +
+    row('pause', `Longest break: ${gap.d} days before ${EXAMS[gap.i].code}`, `${fmtDay(gs)} to ${fmtDay(ge)}`) +
+    row('flag', `${prepDays(0)} days between the last class and ${first.code}`, `Last class ${fmtDay(new Date(LAST_CLASS_DAY.toDateString()))}, first paper ${fmtDay(examDay(first))}`) +
+    (noExam.length ? row('dash', `No paper for ${noExam.join(', ')}`, 'These courses aren’t on the exam timetable') : '');
+
+  document.getElementById('examNotes').innerHTML =
+    row('check', 'Attendance decides eligibility', 'You can sit each paper only if you meet that course’s attendance requirement.') +
+    row('clock', 'Exam timings', `Forenoon ${examSlotText({slot:'FN'})} · Afternoon ${examSlotText({slot:'AN'})}`) +
+    row('info', 'Check the portal for changes', 'The exam office said timetable changes would be released on 16 Oct. Confirm your dates on the portal.');
+}
+
+function tickExamCountdown(){
+  const box = document.getElementById('exCount');
+  if(!box) return;
+  const lx = liveExam(), ne = lx || nextExam();
+  if(!ne) return;
+  const target = lx ? examEnd(lx) : examStart(ne);
+  const s = Math.max(0, Math.floor((target - new Date()) / 1000));
+  const vals = {d:Math.floor(s/86400), h:Math.floor(s%86400/3600), m:Math.floor(s%3600/60), s:s%60};
+  box.querySelectorAll('b').forEach(b=>{
+    const v = String(vals[b.dataset.u]).padStart(2,'0');
+    if(b.textContent !== v){ b.textContent = v; b.classList.remove('tick'); void b.offsetWidth; b.classList.add('tick'); }
+  });
+}
+
 /* ================= TABS / THEME ================= */
 function switchTab(t){
-  ['week','courses','timeline'].forEach(x=>{
+  ['week','courses','exams','timeline'].forEach(x=>{
     document.getElementById('nav-'+x).classList.toggle('active', x===t);
     document.getElementById('view-'+x).style.display = x===t ? 'block' : 'none';
   });
   window.scrollTo({top:0, behavior:'auto'});
   if(t==='courses') renderCourses();
   if(t==='timeline') renderTimeline();
+  if(t==='exams') renderExams();
   if(t==='week'){ scrollToCurrentRow(); requestAnimationFrame(positionGridNeedle); }
 }
 function syncThemeColor(){
